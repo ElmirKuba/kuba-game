@@ -1,0 +1,31 @@
+services:
+  mysql_kubagame_dev: # Наименование сервиса Docker
+    container_name: mysql_kubagame_dev # Наименование контейнера Docker
+    image: mysql:5.6.51 # Последняя версия СуБД MySQL которая работает с SAMP/OMP серверами
+    restart: unless-stopped # Если оборудование где запущены докер контейнеры упало, то Docker после запуска системы посмотрит и поднимет только в случае если контейнер работал до подения
+    platform: linux/amd64 # Для корректной работы на arm системах надо явно указать линковку 64 бит
+    environment: # Переменные среды внутри контейнера mysql_kubagame_dev
+      - MYSQL_DATABASE=mysql_kubagame_dev # Прокидываем наименование базы данных в СуБД MySQL
+      - MYSQL_USER=${MYSQL_USER} # Прокидываем логин пользователя в переменные среды контейнера Docker для того чтобы пользователь смог использовать СуБД MySQL
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD} # Прокидываем пароль пользователя в переменные среды контейнера Docker для того чтобы пользователь смог использовать СуБД MySQL
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # Прокидываем ROOT пароль в переменные среды контейнера Docker для корректной работы СуБД MySQL из .env файла
+    # volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
+    # TODO: ElmirKuba 2025-07-28: Раскоментировать строку ниже, когда будет готов основной каскад таблиц СуБД системы
+    # - ./../sql-files/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # При первичной инициализации возьмет файл init.sql и на основе него создаст таблицы в базе данных СуБД MySQL
+    # TODO: ElmirKuba 2025-07-28: Раскоментировать строку ниже, когда будет необходимость сохранять прогресс базы данных вне контейнера Docker
+    # - ./../volumes/db_data:/var/lib/mysql # Сохранит прогресс работы СуБД MySQL вне контейнера Docker
+    expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
+      - ${MYSQL_PORT}
+    ports: # Прокидывание портов наружу из контейнера Docker
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    networks: # Сети в которых этот контейнер Docker смогут находить другие контейнеры Docker
+      - network_kubagame_project
+
+# Сети Docker Compose
+networks:
+  # Сеть Docker Compose продукта для разработки
+  network_kubagame_project:
+    name: network_kubagame_project
+    external: true # Указываем что сеть с таким именем потребуется создавать вручную (явный контроль)
+    # network network_kubagame_project declared as external, but could not be found
+    # Исп.: docker network create network_kubagame_project
