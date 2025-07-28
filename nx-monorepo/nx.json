@@ -51,9 +51,20 @@
       }
     }
   ],
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nx/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": []
+      }
+    }
+  },
   "targetDefaults": {
+    "*": {
+      "cache": false
+    },
     "@angular-devkit/build-angular:browser": {
-      "cache": true,
+      "cache": false,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }

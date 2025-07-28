@@ -8,6 +8,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
+      "cache": false,
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/angular-frontend",
@@ -54,6 +55,7 @@
     "serve": {
       "continuous": true,
       "executor": "@angular-devkit/build-angular:dev-server",
+      "cache": false,
       "configurations": {
         "production": {
           "buildTarget": "angular-frontend:build:production"
