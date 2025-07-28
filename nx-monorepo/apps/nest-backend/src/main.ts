@@ -1,6 +1,9 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { watch } from 'fs';
+import { resolve } from 'path';
+import { execSync } from 'child_process';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +19,22 @@ async function bootstrap() {
   Logger.log(
     `🚀 Nest Backend для проекта KubaGame запущен и слушает: http://localhost:${port}/${globalPrefix}`
   );
+
+  watch(resolve(process.cwd()), { recursive: true }, (eventType, fileName) => {
+    if (fileName && fileName.includes('schema')) {
+      console.log('🔍 Обнаружено изменение в schema-файле:');
+      console.log('  📂 Тип события:', eventType);
+      console.log('  📄 Имя файла:', fileName);
+
+      const output = execSync('npm run drizzle:push', {
+        encoding: 'utf-8', // для корректного отображения кириллицы
+        stdio: 'pipe', // можно заменить на 'inherit' для прямого вывода
+      });
+
+      console.log('✅ drizzle:push завершено:');
+      console.log(output);
+    }
+  });
 }
 
 bootstrap();

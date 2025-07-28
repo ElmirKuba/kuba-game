@@ -1,0 +1,1 @@
+ALTER TABLE `accounts` ADD `login` varchar(20) NOT NULL;

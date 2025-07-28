@@ -11,6 +11,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD} # Прокидываем пароль пользователя в переменные среды контейнера Docker для того чтобы пользователь смог использовать СуБД MySQL
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # Прокидываем ROOT пароль в переменные среды контейнера Docker для корректной работы СуБД MySQL из .env файла
     volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
+      - ./../sql-files/my.cnf:/etc/mysql/conf.d/my.cnf:ro
       - ./../sql-files/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # При первичной инициализации возьмет файл init.sql и на основе него создаст таблицы в базе данных СуБД MySQL
       - ./../volumes/db_data:/var/lib/mysql # Сохранит прогресс работы СуБД MySQL вне контейнера Docker
     expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
@@ -65,6 +66,7 @@ services:
       - ./../../nx-monorepo/apps/nest-backend-e2e:/nestbackend_kubagame_workspace/nx-monorepo/apps/nest-backend-e2e:rw
       - ./../../nx-monorepo/libs/backend:/nestbackend_kubagame_workspace/nx-monorepo/libs/backend:rw
       - ./../../nx-monorepo/libs/common:/nestbackend_kubagame_workspace/nx-monorepo/libs/common:rw
+      - ./../../nx-monorepo/tsconfig.base.json:/nestbackend_kubagame_workspace/nx-monorepo/tsconfig.base.json
       # TODO: ElmirKuba 2025-07-28: Расскоментировать строку ниже когда потребуется создаваемые backend частью проекта файлы сохранять между перезапусками контейнеров отдавая их на хостовую машину
       # - ./../../nx-monorepo/uploads:/nestbackend_kubagame_workspace/nx-monorepo/uploads:rw
     command: sh -c "sleep 30s && npm run backend:watch --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
