@@ -14,7 +14,7 @@ async function bootstrap() {
   await app.listen(port);
 
   Logger.log(
-    `🚀 Nest Backend запущен и слушает: http://localhost:${port}/${globalPrefix}`
+    `🚀 Nest Backend для проекта KubaGame запущен и слушает: http://localhost:${port}/${globalPrefix}`
   );
 }
 

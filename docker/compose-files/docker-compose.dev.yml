@@ -27,7 +27,7 @@ services:
     image: phpmyadmin # Любой latest image
     restart: unless-stopped # Если оборудование где запущены докер контейнеры упало, то Docker после запуска системы посмотрит и поднимет только в случае если контейнер работал до подения
     platform: linux/amd64 # Для корректной работы на arm системах надо явно указать линковку 64 бит
-    environment: # Переменные среды внутри контейнера mysql_kubagame_dev
+    environment: # Переменные среды внутри контейнера pma_kubagame_dev
       - PMA_ARBITRARY=0 # when set to 1 connection to the arbitrary server will be allowed
       - PMA_HOST=mysql_kubagame_dev # Здесь указываем через "=" наименование контейнера-сервиса Docker для СуБД MySQL
       - PMA_PORT=${MYSQL_PORT} # Здесь указываем переменную порта работы СуБД MySQL контейнера Docker из .env
@@ -40,6 +40,44 @@ services:
     depends_on: # Заставляем контейнер phpMyAdmin ждать перечисленные контейнеры
       - mysql_kubagame_dev
   # Сервис phpMyAdmin
+
+  # Сервис Backend-части проекта
+  nestbackend_kubagame_dev: # Наименование сервиса Docker
+    container_name: nestbackend_kubagame_dev # Наименование контейнера Docker
+    build: # Правила сборки сервиса Docker
+      context: ./../../ # Указываем что контекст проекта находится на два уровня выше а не в папке docker/compose-files, то есть в корне репозитория в целом
+      dockerfile: ./docker/dockerfiles/nest-backend/Dockerfile.dev # Указываем путь для сборки Docker контейнера (так как это наш самописный docker image)
+    platform: linux/amd64 # Для корректной работы на arm системах надо явно указать линковку 64 бит
+    restart: unless-stopped # Если оборудование где запущены докер контейнеры упало, то Docker после запуска системы посмотрит и поднимет только в случае если контейнер работал до подения
+    environment: # Переменные среды внутри контейнера nestbackend_kubagame_dev
+      - NX_DAEMON=true
+      - CHOKIDAR_USEPOLLING=true
+      - MYSQL_HOST_AND_NAME_DATABASE=mysql_kubagame_dev
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - ACCESS_KEY_JWT=${ACCESS_KEY_JWT}
+      - ACCESS_TOKEN_LIFETIME=${ACCESS_TOKEN_LIFETIME}
+      - REFRESH_KEY_JWT=${REFRESH_KEY_JWT}
+      - REFRESH_TOKEN_LIFETIME=${REFRESH_TOKEN_LIFETIME}
+    volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
+      - ./../../nx-monorepo/apps/nest-backend:/nestbackend_kubagame_workspace/nx-monorepo/apps/nest-backend:rw
+      - ./../../nx-monorepo/apps/nest-backend-e2e:/nestbackend_kubagame_workspace/nx-monorepo/apps/nest-backend-e2e:rw
+      - ./../../nx-monorepo/libs/backend:/nestbackend_kubagame_workspace/nx-monorepo/libs/backend:rw
+      - ./../../nx-monorepo/libs/common:/nestbackend_kubagame_workspace/nx-monorepo/libs/common:rw
+      # TODO: ElmirKuba 2025-07-28: Расскоментировать строку ниже когда потребуется создаваемые backend частью проекта файлы сохранять между перезапусками контейнеров отдавая их на хостовую машину
+      # - ./../../nx-monorepo/uploads:/nestbackend_kubagame_workspace/nx-monorepo/uploads:rw
+    command: sh -c "sleep 30s && npm run backend:watch --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
+    expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
+      - ${BACKEND_PORT}
+    ports: # Прокидывание портов наружу из контейнера Docker
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    networks: # Сети в которых этот контейнер Docker смогут находить другие контейнеры Docker
+      - network_kubagame_project
+    depends_on: # Заставляем контейнер phpMyAdmin ждать перечисленные контейнеры
+      - pma_kubagame_dev
+      - mysql_kubagame_dev
+  # Сервис Backend-части проекта
 
 # Сети Docker Compose
 networks:

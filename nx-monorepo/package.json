@@ -2,7 +2,9 @@
   "name": "@nx-monorepo/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "backend:watch": "nx serve nest-backend --verbose"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "~20.1.0",
