@@ -20,6 +20,7 @@ async function bootstrap() {
     `🚀 Nest Backend для проекта KubaGame запущен и слушает: http://localhost:${port}/${globalPrefix}`
   );
 
+  // TODO: ElmirKuba 2025-07-29: Сделать апишку, которая запускает миграции схем в базу данных и работает только в dev режиме
   watch(resolve(process.cwd()), { recursive: true }, (eventType, fileName) => {
     if (fileName && fileName.includes('schema')) {
       console.log('🔍 Обнаружено изменение в schema-файле:');
