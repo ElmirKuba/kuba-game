@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@db": ["libs/backend/db/src/index.ts"],
+      "@backend/system": ["libs/backend/system/src/index.ts"],
       "@backend/accounts": ["libs/backend/accounts/src/index.ts"]
     }
   },

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from '@db';
-// import { AccountsModule } from '@backend/accounts';
+import { SystemModule } from '@backend/system';
+import { AccountsModule } from '@backend/accounts';
 
 /** Главный модуль приложения */
 @Module({
-  // imports: [DbModule, AccountsModule],
-  imports: [DbModule],
+  imports: [SystemModule, AccountsModule],
   exports: [],
   controllers: [],
   providers: [],

@@ -7,7 +7,7 @@ export default defineConfig({
   schema: schemaGlobs,
 
   /** куда складывать сгенерированные миграции */
-  out: 'libs/backend/db/migrations',
+  out: 'libs/backend/system/migrations',
 
   /** диалект БД */
   dialect: 'mysql',
