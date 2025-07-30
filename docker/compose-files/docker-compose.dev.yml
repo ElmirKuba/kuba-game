@@ -62,13 +62,13 @@ services:
       - REFRESH_KEY_JWT=${REFRESH_KEY_JWT}
       - REFRESH_TOKEN_LIFETIME=${REFRESH_TOKEN_LIFETIME}
     volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
-      - ./../../nx-monorepo/apps/nest-backend:/nestbackend_kubagame_workspace/nx-monorepo/apps/nest-backend:rw
-      - ./../../nx-monorepo/apps/nest-backend-e2e:/nestbackend_kubagame_workspace/nx-monorepo/apps/nest-backend-e2e:rw
-      - ./../../nx-monorepo/libs/backend:/nestbackend_kubagame_workspace/nx-monorepo/libs/backend:rw
-      - ./../../nx-monorepo/libs/common:/nestbackend_kubagame_workspace/nx-monorepo/libs/common:rw
-      - ./../../nx-monorepo/tsconfig.base.json:/nestbackend_kubagame_workspace/nx-monorepo/tsconfig.base.json
+      - ./../../nx-workspace/apps/nest-backend:/nestbackend_kubagame_workspace/nx-workspace/apps/nest-backend:rw
+      - ./../../nx-workspace/apps/nest-backend-e2e:/nestbackend_kubagame_workspace/nx-workspace/apps/nest-backend-e2e:rw
+      - ./../../nx-workspace/libs/backend:/nestbackend_kubagame_workspace/nx-workspace/libs/backend:rw
+      - ./../../nx-workspace/libs/common:/nestbackend_kubagame_workspace/nx-workspace/libs/common:rw
+      - ./../../nx-workspace/tsconfig.base.json:/nestbackend_kubagame_workspace/nx-workspace/tsconfig.base.json
       # TODO: ElmirKuba 2025-07-28: Расскоментировать строку ниже когда потребуется создаваемые backend частью проекта файлы сохранять между перезапусками контейнеров отдавая их на хостовую машину
-      # - ./../../nx-monorepo/uploads:/nestbackend_kubagame_workspace/nx-monorepo/uploads:rw
+      # - ./../../nx-workspace/uploads:/nestbackend_kubagame_workspace/nx-workspace/uploads:rw
     command: sh -c "sleep 30s && npm run backend:watch --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
     expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
       - ${BACKEND_PORT}

@@ -1,0 +1,44 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@backend/interfaces/orm-repositories": [
+        "libs/backend/interfaces/orm-repositories-interfaces/src/index.ts"
+      ],
+      "@backend/orm-repositories": [
+        "libs/backend/orm-repositories/src/index.ts"
+      ],
+      "@backend/orm-schemas": ["libs/backend/orm-schemas/src/index.ts"],
+      "@common/interfaces/full": ["libs/common/interfaces/full/src/index.ts"],
+      "@common/interfaces/pure-and-base": [
+        "libs/common/interfaces/pure-and-base/src/index.ts"
+      ],
+      "@common/interfaces/with-child": [
+        "libs/common/interfaces/with-child/src/index.ts"
+      ],
+      "@nx-workspace/api-endpoints": [
+        "libs/backend/api-endpoints/src/index.ts"
+      ],
+      "@nx-workspace/system-logics": [
+        "libs/backend/system-logics/src/index.ts"
+      ],
+      "backend/interfaces/systems": [
+        "libs/backend/interfaces/systems-interfaces/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "systems-interfaces",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/interfaces/systems-interfaces/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project systems-interfaces --web",
+  "targets": {}
+}

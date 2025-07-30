@@ -1,0 +1,9 @@
+{
+  "name": "pure-and-base",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/common/interfaces/pure-and-base/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project pure-and-base --web",
+  "targets": {}
+}
