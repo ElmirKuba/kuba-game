@@ -10,12 +10,12 @@ import * as iconv from 'iconv-lite';
 
 /** Сервис модуля системы аккаунтов */
 @Injectable()
-export class AccountCreateLoginService {
+export class AccountCreateService {
   /**
    * Логгер NestJS для вывода сообщений в консоль.
    * @protected
    */
-  private readonly logger = new Logger(AccountCreateLoginService.name);
+  private readonly logger = new Logger(AccountCreateService.name);
 
   /**
    * Конструктор сервиса системы
@@ -26,7 +26,7 @@ export class AccountCreateLoginService {
   /**
    * Метод создания аккаунта
    * @param {IAccountPure} dataForNewAccount - Данные для создания аккаунта
-   * @returns {Promise<void>} - Ничего не возвращает
+   * @returns {Promise<void>} - Результат регистрации аккаунта
    * @public
    * */
   public async create(

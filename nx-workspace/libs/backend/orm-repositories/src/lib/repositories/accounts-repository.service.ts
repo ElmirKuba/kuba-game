@@ -33,8 +33,11 @@ export class AccountsRepositoryService {
   public async create(
     dataForNewAccount: IAccountPure
   ): Promise<RepositoryResult<null>> {
+    /** UUID_V4 идентификатор */
     const tempUuidV4 = uuidv4();
+    /** Кол-во мс сейчас */
     const tempMilliseconds = Date.now();
+    /** Формируем идентификатор вида uuid-v4_unixtime(13length) */
     const id = `${tempUuidV4}_${tempMilliseconds}`;
 
     /** Результат создания аккаунта */

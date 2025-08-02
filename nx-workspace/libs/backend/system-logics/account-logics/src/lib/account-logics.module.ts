@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AccountCreateLoginService } from './services/create.service';
+import { AccountCreateService } from './services/create.service';
 import { OrmRepositoriesModule } from '@backend/orm-repositories';
+import { AccountAuthService } from './services/auth.service';
+import { SystemsGenerateTokenModule } from '@backend/token';
 
 /** Модель системы аккаунтов */
 @Module({
-  imports: [OrmRepositoriesModule],
-  exports: [AccountCreateLoginService],
+  imports: [OrmRepositoriesModule, SystemsGenerateTokenModule],
+  exports: [AccountCreateService, AccountAuthService],
   controllers: [],
-  providers: [AccountCreateLoginService],
+  providers: [AccountCreateService, AccountAuthService],
 })
 export class AccountLogicsModule {}

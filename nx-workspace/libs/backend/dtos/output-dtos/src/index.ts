@@ -1,1 +1,1 @@
-export * from './lib/output-dtos.module';
+export * from './lib/account-to-input-data.dto';

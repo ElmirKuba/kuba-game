@@ -1,1 +1,1 @@
-export * from './lib/account-to-create.dto';
+export * from './lib/account-to-input-data.dto';

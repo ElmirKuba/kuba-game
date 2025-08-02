@@ -7,8 +7,8 @@ import {
   InternalServerErrorException,
   Post,
 } from '@nestjs/common';
-import { AccountCreateLoginService } from '@backend/systems/account-logics';
-import { AccountToCreateDto } from '@nx-workspace/dtos/input';
+import { AccountCreateService } from '@backend/systems/account-logics';
+import { AccountToInputDataDto } from '@backend/dtos/input';
 import {
   EnumerationErrorCodes,
   SystemResult,
@@ -20,23 +20,23 @@ import { ApiResult } from '@backend/interfaces/api';
 export class ApiCreateAccountController {
   /**
    * Конструктор контроллера системы
-   * @param {AccountCreateLoginService} accountCreateLoginService - Сервис бизнес логики создания аккаунта
+   * @param {AccountCreateService} accountCreateService - Сервис бизнес логики создания аккаунта
    **/
-  constructor(private accountCreateLoginService: AccountCreateLoginService) {}
+  constructor(private accountCreateService: AccountCreateService) {}
 
   /**
    * Создание нового аккаунта
    * @returns {Promise<ApiResult<null>>} - Результат работы REST-API Post эндпоинта создания аккаунта
-   * @private
+   * @public
    **/
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   public async create(
-    @Body() accountToCreateDto: AccountToCreateDto
+    @Body() accountToInputDataDto: AccountToInputDataDto
   ): Promise<ApiResult<null>> {
     /** Результат создания аккаунта */
     const resultCreate: SystemResult<null> =
-      await this.accountCreateLoginService.create(accountToCreateDto);
+      await this.accountCreateService.create(accountToInputDataDto);
 
     const returned: ApiResult<null> = {
       error: resultCreate.error,

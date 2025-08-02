@@ -2,7 +2,7 @@ import { IAccountPure } from '@common/interfaces/pure-and-base';
 import { IsString, Length } from 'class-validator';
 
 /** DTO для создания аккаунта */
-export class AccountToCreateDto implements IAccountPure {
+export class AccountToInputDataDto implements IAccountPure {
   /** Конструктор класса DTO создания аккаунта */
   constructor() {
     this.login = '';
