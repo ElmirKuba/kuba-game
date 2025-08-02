@@ -3,9 +3,10 @@
  * Приложение: backend-часть проекта KubaGame
  */
 
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { ApiExceptionFilter, exceptionFactoryHandler } from '@backend/filters';
 
 /**
  * Главная функция запуска NestJS приложения
@@ -18,7 +19,18 @@ async function bootstrap() {
   /** Глобальный префикс REST-API */
   const globalPrefix = 'api';
 
-  app.setGlobalPrefix(globalPrefix);
+  app
+    .setGlobalPrefix(globalPrefix)
+    .useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        stopAtFirstError: false,
+        exceptionFactory: exceptionFactoryHandler,
+      })
+    )
+    .useGlobalFilters(new ApiExceptionFilter(app.get(HttpAdapterHost)));
 
   /** Порт, который занимает REST-API */
   const port = process.env.PORT || 3000;

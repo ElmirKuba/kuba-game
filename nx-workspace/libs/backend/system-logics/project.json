@@ -1,9 +1,0 @@
-{
-  "name": "system-logics",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/backend/system-logics/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project system-logics --web",
-  "targets": {}
-}

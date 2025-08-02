@@ -1,4 +1,4 @@
-import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { SystemService } from './system.service';
 
 /** Основной REST-API контроллер системного модуля приложения NestJS */
@@ -15,15 +15,6 @@ export class SystemController {
    * @returns {string[]} - Результат миграции схем в базу данных
    * */
   @Get('dev/migrate')
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-      skipUndefinedProperties: false,
-      stopAtFirstError: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    })
-  )
   devMigrate(): string[] {
     const resultMigrateMessages = this.systemService.devMigrate();
 
