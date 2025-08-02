@@ -5,6 +5,8 @@ import { SystemResult } from '@backend/interfaces/systems';
 import { EnumerationErrorCodes } from '@backend/interfaces/systems';
 import { RepositoryResult } from '@backend/interfaces/orm-repositories';
 import { IAccountFull } from '@common/interfaces/full';
+import * as bcrypt from 'bcrypt';
+import * as iconv from 'iconv-lite';
 
 /** Сервис модуля системы аккаунтов */
 @Injectable()
@@ -67,9 +69,18 @@ export class AccountCreateLoginService {
       `Аккаунт с логином "${dataForNewAccount.login}" не найден!`
     );
 
+    /** Совместимость с SAMP-сервером, надо строку из UTF-8 переделать в CP-1251 */
+    const passwordByCp1251 = iconv.encode(dataForNewAccount.password, 'cp1251');
+
+    /** Захешированный пароль */
+    const tempBcryptHashPassword = bcrypt.hashSync(passwordByCp1251, 8);
+
     /** Результаты создания аккаунта */
     const resultCreate: RepositoryResult<null> =
-      await this.accountsRepositoryService.create(dataForNewAccount);
+      await this.accountsRepositoryService.create({
+        ...dataForNewAccount,
+        password: tempBcryptHashPassword,
+      });
 
     if (resultCreate.error) {
       errorMessages.push(
