@@ -6,6 +6,7 @@ import {
   CreateOrUpdateSessionModule,
   GenerateTokensModule,
 } from '@backend/sessions-and-tokens';
+import { AccountLogoutService } from './services/logout.service';
 
 /** Модель системы аккаунтов */
 @Module({
@@ -14,8 +15,8 @@ import {
     GenerateTokensModule,
     CreateOrUpdateSessionModule,
   ],
-  exports: [AccountCreateService, AccountAuthService],
+  exports: [AccountCreateService, AccountAuthService, AccountLogoutService],
   controllers: [],
-  providers: [AccountCreateService, AccountAuthService],
+  providers: [AccountCreateService, AccountAuthService, AccountLogoutService],
 })
 export class AccountLogicsModule {}

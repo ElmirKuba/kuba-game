@@ -18,7 +18,7 @@ import {
 import { IPairTokens } from '@common/interfaces/tokens';
 import { IBrowser, ICPU, IResult } from 'ua-parser-js';
 
-/** Сервис модуля системы аккаунтов */
+/** Сервис модуля системы авторизации аккаунтов */
 @Injectable()
 export class AccountAuthService {
   /**
@@ -41,7 +41,7 @@ export class AccountAuthService {
 
   /**
    * Метод авторизации аккаунта
-   * @param {IAccountPure} dataForAuthCurrectAccount - Данные для авторизации аккаунта
+   * TODO: Описать {@}param
    * @returns {Promise<SystemResult<null>>} - Результаты работы метода авторизации аккаунта
    * @public
    */

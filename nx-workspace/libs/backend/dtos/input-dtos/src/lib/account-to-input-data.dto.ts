@@ -1,7 +1,7 @@
 import { IAccountPure } from '@common/interfaces/pure-and-base';
 import { IsString, Length } from 'class-validator';
 
-/** DTO для создания аккаунта */
+/** DTO для создания аккаунта или авторизации аккаунта */
 export class AccountToInputDataDto implements IAccountPure {
   /** Конструктор класса DTO создания аккаунта */
   constructor() {

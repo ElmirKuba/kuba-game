@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Header,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
@@ -26,10 +27,14 @@ export class ApiAuthAccountController {
 
   /**
    * Автооризация текущего аккаунта
+   * @param {Request} req - Попутные данные при запросе на данное REST API
+   * @param {Response} res - Попутные данные при ответе от данного REST API
+   * @param {AccountToInputDataDto} accountToInputDataDto - Данные авторизации аккаунта от клиента
    * @returns {Promise<ApiResult<IAccountWithoutPassword>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
    * @public
    */
   @Post('auth')
+  @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')
   public async auth(
