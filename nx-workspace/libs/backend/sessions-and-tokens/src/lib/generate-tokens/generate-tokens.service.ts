@@ -5,7 +5,7 @@ import type { StringValue } from 'ms';
 
 /** Сервис модуля генерации JWT токенов */
 @Injectable()
-export class SystemGenerateTokenService {
+export class GenerateTokensService {
   /**
    * Метод генерации новой пары токенов JWT
    * @param {IPayloadForTokens} payload - Полезная нагрузка для генерации новой пары JWT токенов

@@ -15,6 +15,20 @@
       "when": 1754148668753,
       "tag": "0001_magenta_arachne",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1754214383807,
+      "tag": "0002_jazzy_loners",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1754232535267,
+      "tag": "0003_goofy_patriot",
+      "breakpoints": true
     }
   ]
 }

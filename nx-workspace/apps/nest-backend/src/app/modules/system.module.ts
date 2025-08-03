@@ -2,7 +2,12 @@ import { Module } from '@nestjs/common';
 import { SystemController } from './system.controller';
 import { SystemService } from './system.service';
 import { DrizzleMySqlModule } from '@knaadh/nestjs-drizzle-mysql2';
-import { accountsSchema } from '@backend/orm-schemas';
+import {
+  accountsRelations,
+  accountsSchema,
+  sessionsRelations,
+  sessionsSchema,
+} from '@backend/orm-schemas';
 
 /** Основной системный модуль приложения NestJS */
 @Module({
@@ -21,7 +26,15 @@ import { accountsSchema } from '@backend/orm-schemas';
         },
       },
       config: {
-        schema: { accountsSchema },
+        schema: {
+          // Схемы
+          accountsSchema,
+          sessionsSchema,
+
+          // Связи
+          accountsRelations,
+          sessionsRelations,
+        },
         mode: 'default',
         casing: 'camelCase',
       },

@@ -11,8 +11,12 @@ import * as bcrypt from 'bcrypt';
 import * as iconv from 'iconv-lite';
 import { AccountToOutputFrontend } from '@backend/dtos/output';
 import { IAccountWithoutPassword } from '@common/interfaces/full';
-import { SystemGenerateTokenService } from '@backend/token';
+import {
+  CreateOrUpdateSessionService,
+  GenerateTokensService,
+} from '@backend/sessions-and-tokens';
 import { IPairTokens } from '@common/interfaces/tokens';
+import { IBrowser, ICPU, IResult } from 'ua-parser-js';
 
 /** Сервис модуля системы аккаунтов */
 @Injectable()
@@ -26,11 +30,13 @@ export class AccountAuthService {
   /**
    * Конструктор сервиса системы
    * @param {AccountsRepositoryService} accountsRepositoryService — Экземпляр репозитория для работы с сущностью Accounts
-   * @param {SystemGenerateTokenService} systemGenerateTokenService - Экземпляр сервиса модуля генерации JWT токенов
+   * @param {GenerateTokensService} generateTokensService - Экземпляр сервиса модуля генерации JWT токенов
+   * @param {CreateOrUpdateSessionService} createOrUpdateSessionService - Экземпляр сервиса модуля создания сессии
    */
   constructor(
     private accountsRepositoryService: AccountsRepositoryService,
-    private systemGenerateTokenService: SystemGenerateTokenService
+    private generateTokensService: GenerateTokensService,
+    private createOrUpdateSessionService: CreateOrUpdateSessionService
   ) {}
 
   /**
@@ -39,9 +45,23 @@ export class AccountAuthService {
    * @returns {Promise<SystemResult<null>>} - Результаты работы метода авторизации аккаунта
    * @public
    */
-  public async auth(
-    dataForAuthCurrectAccount: IAccountPure
-  ): Promise<SystemResult<IAccountWithoutPassword | null>> {
+  public async auth({
+    dataForAuthCurrectAccount,
+    userAgentData,
+    userIp,
+  }: {
+    /** Данные аккаунта для авторизации */
+    dataForAuthCurrectAccount: IAccountPure;
+    /** Данные парсинга user-agent */
+    userAgentData?: IResult;
+    /** IP-адрес пользователя */
+    userIp?: string;
+  }): Promise<
+    SystemResult<{
+      account: IAccountWithoutPassword | null;
+      tokens: IPairTokens;
+    } | null>
+  > {
     /** Массив сообщений для ошибок */
     const errorMessages: string[] = [];
     /** Массив сообщений для успеха */
@@ -98,35 +118,76 @@ export class AccountAuthService {
       };
     }
 
-    successMessages.push(
-      `Вы успешно авторизовались в аккаунт с логином "${dataForAuthCurrectAccount.login}"!`
-    );
-
     /** Данные аккаунта без поля пароля для Frontend */
     const accountToOutputFromFrontendDto: IAccountWithoutPassword =
       new AccountToOutputFrontend(resultRead.data);
 
     const pairTokens: IPairTokens =
-      this.systemGenerateTokenService.generatePairTokens({
+      this.generateTokensService.generatePairTokens({
         accountDto: accountToOutputFromFrontendDto,
+        userAgentData,
+        userIp,
       });
 
-    console.log('pairTokens::', pairTokens);
+    const browserData = Object.values(userAgentData?.browser as IBrowser)
+      .map((browserDataItem) => {
+        return browserDataItem ?? '';
+      })
+      .join(' ');
+    const cpuArchitecture = Object.values(userAgentData?.cpu as ICPU)
+      .map((cpuArchitectureItem) => {
+        return cpuArchitectureItem ?? '';
+      })
+      .join(' ');
+    const deviceData = Object.values(userAgentData?.device as ICPU)
+      .map((deviceDataItem) => {
+        return deviceDataItem ?? '';
+      })
+      .join(' ');
+    const osData = Object.values(userAgentData?.os as ICPU)
+      .map((osDataItem) => {
+        return osDataItem ?? '';
+      })
+      .join(' ');
 
-    // TODO: ElmirKuba 2025-08-02: Продолжить работу с токенами
+    const resultSavedToken = this.createOrUpdateSessionService.createOrUpdate({
+      accountId: resultRead.data?.id as string,
+      browserData,
+      cpuArchitecture,
+      deviceData,
+      ip: userIp as string,
+      osData,
+      refreshToken: pairTokens.refreshToken,
+      ua: userAgentData?.ua as string,
+    });
 
-    // const resultSavedToken =
-    //   await this.systemSaveOrUpdateTokenService.saveOrUpdate({
-    //     accountIDFK: authAccount.accountIDPK,
-    //     refreshToken: pairTokens.refreshToken,
-    //   });
+    if (!resultSavedToken) {
+      errorMessages.push(
+        `Невозможно провести авторизацию аккаунта "${dataForAuthCurrectAccount.login}", пока что не получилось создать сессию!`
+      );
+
+      return {
+        error: true,
+        errorMessages,
+        successMessages,
+        data: null,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_INTERNAL_ERROR,
+      };
+    }
+
+    successMessages.push(
+      `Вы успешно авторизовались в аккаунт с логином "${dataForAuthCurrectAccount.login}"!`
+    );
 
     return {
       error: false,
       errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
       errorMessages,
       successMessages,
-      data: accountToOutputFromFrontendDto,
+      data: {
+        account: accountToOutputFromFrontendDto,
+        tokens: pairTokens,
+      },
     };
   }
 }

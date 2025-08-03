@@ -27,7 +27,7 @@ export class AccountsRepositoryService {
   /**
    * Создаёт нового пользователя.
    * @param data — объект с полями login и password (id генерируется здесь)
-   * @returns {boolean} - Результат создания аккаунта (true - успех | false - не получилось создать аккаунт)
+   * @returns {Promise<RepositoryResult<null>>} - Результат создания аккаунта (true - успех | false - не получилось создать аккаунт)
    * @public
    */
   public async create(

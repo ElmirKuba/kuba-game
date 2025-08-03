@@ -1,1 +1,1 @@
-export * from './lib/with-child';
+export * from './lib/session-update.interface';

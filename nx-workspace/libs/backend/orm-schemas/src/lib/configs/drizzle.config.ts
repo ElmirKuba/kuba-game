@@ -3,6 +3,7 @@ import { defineConfig } from 'drizzle-kit';
 /** Массив для добавления схем для миграций в базу данных */
 const schemaGlobs: string[] = [
   'libs/backend/orm-schemas/src/lib/schemas/accounts.schema.ts',
+  'libs/backend/orm-schemas/src/lib/schemas/sessions.schema.ts',
 ];
 
 export default defineConfig({
