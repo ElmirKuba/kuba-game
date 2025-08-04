@@ -32,22 +32,23 @@
         "libs/backend/orm-repositories/src/index.ts"
       ],
       "@backend/orm-schemas": ["libs/backend/orm-schemas/src/index.ts"],
-      "@backend/systems/account-logics": [
-        "libs/backend/system-logics/account-logics/src/index.ts"
-      ],
       "@backend/sessions-and-tokens": [
         "libs/backend/sessions-and-tokens/src/index.ts"
+      ],
+      "@backend/systems/account-logics": [
+        "libs/backend/system-logics/account-logics/src/index.ts"
       ],
       "@common/interfaces/full": ["libs/common/interfaces/full/src/index.ts"],
       "@common/interfaces/pure-and-base": [
         "libs/common/interfaces/pure-and-base/src/index.ts"
       ],
+      "@common/interfaces/tokens": [
+        "libs/common/interfaces/tokens/src/index.ts"
+      ],
       "@common/interfaces/with-child": [
         "libs/common/interfaces/with-child/src/index.ts"
       ],
-      "@common/interfaces/tokens": [
-        "libs/common/interfaces/tokens/src/index.ts"
-      ]
+      "@backend/guards": ["libs/backend/guards/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"],

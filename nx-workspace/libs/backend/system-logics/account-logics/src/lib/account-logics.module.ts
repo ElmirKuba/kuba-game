@@ -5,6 +5,7 @@ import { AccountAuthService } from './services/auth.service';
 import {
   CreateOrUpdateSessionModule,
   GenerateTokensModule,
+  RemoveTokensModule,
 } from '@backend/sessions-and-tokens';
 import { AccountLogoutService } from './services/logout.service';
 
@@ -14,6 +15,7 @@ import { AccountLogoutService } from './services/logout.service';
     OrmRepositoriesModule,
     GenerateTokensModule,
     CreateOrUpdateSessionModule,
+    RemoveTokensModule,
   ],
   exports: [AccountCreateService, AccountAuthService, AccountLogoutService],
   controllers: [],

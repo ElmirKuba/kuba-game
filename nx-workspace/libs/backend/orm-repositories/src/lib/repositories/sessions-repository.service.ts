@@ -8,7 +8,7 @@ import { ISessionBase } from '@common/interfaces/pure-and-base';
 import { Inject, Injectable } from '@nestjs/common';
 import { MySql2Database } from 'drizzle-orm/mysql2';
 import { v4 as uuidv4 } from 'uuid';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, SQL } from 'drizzle-orm';
 import { ISessionUpdate } from '@common/interfaces/with-child';
 
 /** Репозиторий для работы с сущностью Sessions через Drizzle + mysql2 pool */
@@ -79,7 +79,9 @@ export class SessionsRepositoryService {
     }
 
     /** Объединяем их через and(...) (рекурсивно, так как and принимает 2 аргумента) */
-    const combinedCondition = conditions.reduce((acc, curr) => and(acc, curr));
+    const combinedCondition = conditions.reduce(
+      (acc, curr): SQL<unknown> => and(acc, curr) as SQL<unknown>
+    );
 
     /** Результат чтения сессии */
     const resultRead = await this.db
@@ -120,6 +122,7 @@ export class SessionsRepositoryService {
   public async update(
     sessionUpdate: ISessionUpdate
   ): Promise<RepositoryResult<null>> {
+    /** Результат обновления сессии */
     const resultUpdated = await this.db
       .update(sessionsSchema)
       .set(sessionUpdate.sessionData)
@@ -127,6 +130,24 @@ export class SessionsRepositoryService {
 
     return {
       error: resultUpdated[0].affectedRows ? false : true,
+      data: null,
+    };
+  }
+
+  /**
+   * Удаляет сессию по её ID
+   * @param {string} sessionId - Идентификатор сессии (uuid_v4 + unixtime with ms) для удаления
+   * @returns {Promise<RepositoryResult<null>} - Результат работы метода удаления сессии
+   * @public
+   */
+  public async remove(sessionId: string): Promise<RepositoryResult<null>> {
+    /** Результат удаления сессии */
+    const resultDeleted = await this.db
+      .delete(sessionsSchema)
+      .where(eq(sessionsSchema.id, sessionId));
+
+    return {
+      error: resultDeleted[0].affectedRows ? false : true,
       data: null,
     };
   }

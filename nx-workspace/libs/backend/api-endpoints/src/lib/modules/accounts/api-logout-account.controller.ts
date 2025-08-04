@@ -11,6 +11,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Auth } from '@backend/guards';
 
 /** Контроллер REST-API выхода из аккунта */
 @Controller('account')
@@ -29,6 +30,7 @@ export class ApiLogoutAccountController {
    * @public
    */
   @Post('logout')
+  @Auth()
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')
@@ -54,18 +56,18 @@ export class ApiLogoutAccountController {
       throw new HttpException(result, HttpStatus.UNAUTHORIZED);
     }
 
-    // res.clearCookie('accessToken', {
-    //   httpOnly: true,
-    //   secure: process.env['NODE_ENV'] === 'production',
-    //   sameSite: 'lax',
-    //   path: '/', // должен совпадать с тем, что был при установке
-    // });
-    // res.clearCookie('refreshToken', {
-    //   httpOnly: true,
-    //   secure: process.env['NODE_ENV'] === 'production',
-    //   sameSite: 'lax',
-    //   path: '/',
-    // });
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      path: '/',
+    });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      path: '/',
+    });
 
     return result;
   }

@@ -3,6 +3,7 @@ import {
   SystemResult,
 } from '@backend/interfaces/systems';
 import { Injectable, Logger } from '@nestjs/common';
+import { RemoveTokensService } from '@backend/sessions-and-tokens';
 
 /** Сервис модуля системы выхода из аккаунтов */
 @Injectable()
@@ -15,8 +16,9 @@ export class AccountLogoutService {
 
   /**
    * Конструктор сервиса системы
+   * @param {RemoveTokensService} removeTokensService — Экземпляр сервиса для удаления сессии
    */
-  constructor() {}
+  constructor(private removeTokensService: RemoveTokensService) {}
 
   /**
    * Метод выхода из аккаунта
@@ -44,21 +46,24 @@ export class AccountLogoutService {
       };
     }
 
-    console.log('refreshToken в сервисе выхода', refreshToken);
+    const sessionHasDeleted =
+      await this.removeTokensService.removeSessionByRefreshToken(refreshToken);
 
-    /**
-     * TODO: 1. Мы уже получаем refreshToken суда в сервис добыв из куков в контроллере
-     * TODO: 2. По пути "nx-workspace/libs/backend/sessions-and-tokens/src/lib" сделать remove-session и положить туда модуль и сервис
-     * TODO: 3. В новом модуле поставить сервис доступный к экспорту
-     * TODO: 4. В index сделать доступным к импорту в иных местах кроме этой либы модуль
-     * TODO: 5. В index сделать доступным к импорту в иных местах кроме этой либы сервис
-     * TODO: 6. Заюзать модуль в модуле к которому относится этот сервис
-     * TODO: 7. Инжектить сервис суда
-     * TODO: 8. Передать рефреш токен туда на сервис
-     * TODO: 9. В сервисе искать в бд и если найден удалить
-     * TODO: 10. Если не найден вернуть ошибку
-     * TODO: 11. Здесь обработать ошибку если не найден токен, значит сессии с таким токеном нет, выходить не от куда
-     */
+    if (!sessionHasDeleted) {
+      errorMessages.push(
+        `Невозможно провести выход из аккаунта, пока что не получилось удалить сессию!`
+      );
+
+      return {
+        error: true,
+        errorMessages,
+        successMessages,
+        data: null,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_INTERNAL_ERROR,
+      };
+    }
+
+    successMessages.push(`Вы успешно вышли из аккаунта!`);
 
     return {
       error: false,

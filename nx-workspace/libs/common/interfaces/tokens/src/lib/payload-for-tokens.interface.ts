@@ -5,6 +5,8 @@ import { IResult } from 'ua-parser-js';
 export interface IPayloadForTokens {
   /** Экземпляр DTO аккаунта */
   accountDto: AccountToOutputFrontend;
+  /** Роли на будущее */ // TODO: ElmirKuba 2025-08-04: Если будут нужны роли то это тут
+  rolesDto?: { [key: string]: unknown }[];
   /** Данные парсинга user-agent */
   userAgentData?: IResult;
   /** IP-адрес пользователя */

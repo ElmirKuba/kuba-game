@@ -5,6 +5,7 @@ import { OrmRepositoriesModule } from '@backend/orm-repositories';
 import { AccountLogicsModule } from '@backend/systems/account-logics';
 import { ApiEndpointsModule } from '@backend/api-endpoints';
 import { SessionsAndTokensModule } from '@backend/sessions-and-tokens';
+import { GuardsModule } from '@backend/guards';
 
 /** Главный модуль NestJS приложения */
 @Module({
@@ -15,6 +16,7 @@ import { SessionsAndTokensModule } from '@backend/sessions-and-tokens';
     AccountLogicsModule,
     ApiEndpointsModule,
     SessionsAndTokensModule,
+    GuardsModule,
   ],
   exports: [],
   controllers: [],

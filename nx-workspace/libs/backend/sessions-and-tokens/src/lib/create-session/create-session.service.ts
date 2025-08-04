@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { SystemResult } from '@backend/interfaces/systems';
 import { EnumerationErrorCodes } from '@backend/interfaces/systems';
 
+/** Сервис модуля создания или обновления сессии */
 @Injectable()
 export class CreateOrUpdateSessionService {
   /**
@@ -21,6 +22,7 @@ export class CreateOrUpdateSessionService {
   /**
    * Метод создания или обновления сессии
    * @param {ISessionBase} dataSessionForCreateOrUpdate - Данные сессии для создания или обновления
+   * @param {number} counter - Кол-во попыток для повторения работы
    * @returns {Promise<SystemResult<null>>} - Результат создания сессии
    * @public
    */
@@ -33,6 +35,7 @@ export class CreateOrUpdateSessionService {
     /** Массив сообщений для успеха */
     const successMessages: string[] = [];
 
+    /** Результат нахождения сессии в таблице сессий в СуБД */
     const resultRead = await this.sessionsRepositoryService.readOneBySlug([
       {
         columnName: 'ip',

@@ -3,3 +3,7 @@ export * from './lib/generate-tokens/generate-tokens.module';
 export * from './lib/generate-tokens/generate-tokens.service';
 export * from './lib/create-session/create-session.module';
 export * from './lib/create-session/create-session.service';
+export * from './lib/validate-tokens/validate-tokens.module';
+export * from './lib/validate-tokens/validate-tokens.service';
+export * from './lib/remove-session/remove-session.module';
+export * from './lib/remove-session/remove-session.service';

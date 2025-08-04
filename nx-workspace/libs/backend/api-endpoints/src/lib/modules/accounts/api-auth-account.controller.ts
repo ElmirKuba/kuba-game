@@ -82,12 +82,14 @@ export class ApiAuthAccountController {
       secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'lax',
       maxAge: 1000 * 20,
+      path: '/',
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 30,
+      path: '/',
     });
 
     return returned;
