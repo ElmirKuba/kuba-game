@@ -5,7 +5,6 @@ import {
 import { SessionsRepositoryService } from '@backend/orm-repositories';
 import { Injectable, Logger } from '@nestjs/common';
 import { ValidateTokensService } from '../validate-tokens/validate-tokens.service';
-// import { AccountReadService } from '@backend/systems/account-logics';
 
 /** Сервис модуля для работы с обновлением сессии */
 @Injectable()

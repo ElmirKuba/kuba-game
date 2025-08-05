@@ -10,11 +10,11 @@ import { GuardsModule } from '@backend/guards';
 /** Главный модуль NestJS приложения */
 @Module({
   imports: [
+    ApiEndpointsModule,
     SystemModule,
     OrmSchemasModule,
     OrmRepositoriesModule,
     AccountLogicsModule,
-    ApiEndpointsModule,
     SessionsAndTokensModule,
     GuardsModule,
   ],

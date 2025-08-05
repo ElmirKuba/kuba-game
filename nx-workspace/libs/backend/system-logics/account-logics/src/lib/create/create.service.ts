@@ -8,7 +8,7 @@ import { IAccountFull } from '@common/interfaces/full';
 import * as bcrypt from 'bcrypt';
 import * as iconv from 'iconv-lite';
 
-/** Сервис модуля системы аккаунтов */
+/** Сервис модуля системы создания аккаунтов */
 @Injectable()
 export class AccountCreateService {
   /**

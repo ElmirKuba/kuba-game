@@ -1,35 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AccountCreateService } from './services/create.service';
-import { OrmRepositoriesModule } from '@backend/orm-repositories';
-import { AccountAuthService } from './services/auth.service';
-import {
-  CreateOrUpdateSessionModule,
-  GenerateTokensModule,
-  RemoveTokensModule,
-} from '@backend/sessions-and-tokens';
-import { AccountLogoutService } from './services/logout.service';
-import { AccountReadService } from './services/read.service';
+import { AccountCreateModule } from './create/create.module';
+import { AccountAuthModule } from './auth/auth.module';
+import { AccountLogoutModule } from './logout/logout.module';
+import { AccountReadModule } from './read/read.module';
 
 /** Модуль системы аккаунтов */
 @Module({
   imports: [
-    OrmRepositoriesModule,
-    GenerateTokensModule,
-    CreateOrUpdateSessionModule,
-    RemoveTokensModule,
+    AccountCreateModule,
+    AccountAuthModule,
+    AccountLogoutModule,
+    AccountReadModule,
   ],
-  exports: [
-    AccountCreateService,
-    AccountAuthService,
-    AccountLogoutService,
-    AccountReadService,
-  ],
+  exports: [],
   controllers: [],
-  providers: [
-    AccountCreateService,
-    AccountAuthService,
-    AccountLogoutService,
-    AccountReadService,
-  ],
+  providers: [],
 })
 export class AccountLogicsModule {}
