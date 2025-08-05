@@ -19,6 +19,7 @@
       "@backend/dtos/input": ["libs/backend/dtos/input-dtos/src/index.ts"],
       "@backend/dtos/output": ["libs/backend/dtos/output-dtos/src/index.ts"],
       "@backend/filters": ["libs/backend/filters/src/index.ts"],
+      "@backend/guards": ["libs/backend/guards/src/index.ts"],
       "@backend/interfaces/api": [
         "libs/backend/interfaces/api-interfaces/src/index.ts"
       ],
@@ -47,8 +48,7 @@
       ],
       "@common/interfaces/with-child": [
         "libs/common/interfaces/with-child/src/index.ts"
-      ],
-      "@backend/guards": ["libs/backend/guards/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"],

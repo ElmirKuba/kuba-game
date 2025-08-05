@@ -3,7 +3,7 @@ import {
   SystemResult,
 } from '@backend/interfaces/systems';
 import { Injectable, Logger } from '@nestjs/common';
-import { RemoveTokensService } from '@backend/sessions-and-tokens';
+import { RemoveSessionService } from '@backend/sessions-and-tokens';
 
 /** Сервис модуля системы выхода из аккаунтов */
 @Injectable()
@@ -16,9 +16,9 @@ export class AccountLogoutService {
 
   /**
    * Конструктор сервиса системы
-   * @param {RemoveTokensService} removeTokensService — Экземпляр сервиса для удаления сессии
+   * @param {RemoveSessionService} removeTokensService — Экземпляр сервиса для удаления сессии
    */
-  constructor(private removeTokensService: RemoveTokensService) {}
+  constructor(private removeTokensService: RemoveSessionService) {}
 
   /**
    * Метод выхода из аккаунта

@@ -7,12 +7,12 @@ import { Injectable, Logger } from '@nestjs/common';
 
 /** Сервис модуля для работы с удалением сессии */
 @Injectable()
-export class RemoveTokensService {
+export class RemoveSessionService {
   /**
    * Логгер NestJS для вывода сообщений в консоль.
    * @protected
    */
-  private readonly logger = new Logger(RemoveTokensService.name);
+  private readonly logger = new Logger(RemoveSessionService.name);
 
   /**
    * Конструктор сервиса системы

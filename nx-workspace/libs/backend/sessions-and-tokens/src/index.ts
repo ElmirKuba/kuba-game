@@ -7,3 +7,5 @@ export * from './lib/validate-tokens/validate-tokens.module';
 export * from './lib/validate-tokens/validate-tokens.service';
 export * from './lib/remove-session/remove-session.module';
 export * from './lib/remove-session/remove-session.service';
+export * from './lib/refresh-session/refresh-session.module';
+export * from './lib/refresh-session/refresh-session.service';

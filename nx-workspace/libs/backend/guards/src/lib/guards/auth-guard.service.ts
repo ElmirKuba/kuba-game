@@ -46,12 +46,13 @@ export class AuthGuardService implements CanActivate {
 
     if (resultValidateAccessToken.error) {
       if (
-        resultValidateAccessToken.errorMessages?.some((errMes) =>
-          errMes.includes('jwt expired')
-        )
+        resultValidateAccessToken.errorMessages?.some((errMes) => {
+          return errMes.includes('jwt expired');
+        })
       ) {
         throw new UnauthorizedException('Срок действия токена истёк');
       }
+
       throw new UnauthorizedException(
         'AccessToken недействителен или подделан'
       );
