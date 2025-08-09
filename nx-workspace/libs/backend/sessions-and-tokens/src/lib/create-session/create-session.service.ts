@@ -78,6 +78,7 @@ export class CreateOrUpdateSessionService {
       };
     }
 
+    /** Результат обновления сессии */
     const resultUpdated = await this.sessionAdapterService.update({
       id: resultRead.adapt?.id as string,
       sessionData: dataSessionForCreateOrUpdate,

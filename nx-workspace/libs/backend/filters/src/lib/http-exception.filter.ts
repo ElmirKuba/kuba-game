@@ -19,8 +19,12 @@ interface StandardErrorPayload {
   error?: string;
 }
 
-/** Функция обработки ошибок */
-export const exceptionFactoryHandler = (errors: ValidationError[]) => {
+/**
+ * Функция обработки ошибок
+ * @param {ValidationError[]} errors - Массив ошибок валидации
+ * @returns {never} - Ничего не возвращает
+ * */
+export const exceptionFactoryHandler = (errors: ValidationError[]): never => {
   /** Массив с ошибками от валидатора преобразуем в массив ошибок для API */
   const errorMessages = errors.flatMap((err) =>
     Object.values(err.constraints || {})
@@ -37,6 +41,7 @@ export const exceptionFactoryHandler = (errors: ValidationError[]) => {
   );
 };
 
+/** Класс фильтрующий исключения */
 @Catch(HttpException)
 export class ApiExceptionFilter implements ExceptionFilter {
   constructor(private readonly adapterHost: HttpAdapterHost) {}

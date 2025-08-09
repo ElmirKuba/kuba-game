@@ -20,7 +20,7 @@ export class AccountAdapterService {
   /**
    * Создаёт нового пользователя.
    * @param data — объект с полями login и password (id генерируется здесь)
-   * @returns {Promise<RepositoryResult<null>>} - Результат создания аккаунта (true - успех | false - не получилось создать аккаунт)
+   * @returns {Promise<AdapterResultRepo<null>>} - Результат создания аккаунта (true - успех | false - не получилось создать аккаунт)
    * @public
    */
   public async create(

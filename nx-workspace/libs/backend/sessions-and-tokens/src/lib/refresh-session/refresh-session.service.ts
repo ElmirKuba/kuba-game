@@ -73,6 +73,7 @@ export class RefreshSessionService {
       };
     }
 
+    /** Результат валидации токена */
     const resultValidate = this.validateTokensService.validateAnyToken(
       refreshToken,
       'refreshToken'

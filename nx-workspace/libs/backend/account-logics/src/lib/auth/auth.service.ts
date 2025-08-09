@@ -99,6 +99,7 @@ export class AccountAuthService {
       'cp1251'
     );
 
+    /** Результат сверки паролей */
     const validPassword = bcrypt.compareSync(
       passwordByCp1251,
       resultRead.adapt?.password as string
@@ -122,6 +123,7 @@ export class AccountAuthService {
     const accountToOutputFromFrontendDto: IAccountWithoutPassword =
       new AccountToOutputFrontend(resultRead.adapt);
 
+    /** Новая пара токенов */
     const pairTokens: IPairTokens =
       this.generateTokensService.generatePairTokens({
         accountDto: accountToOutputFromFrontendDto,
@@ -129,27 +131,32 @@ export class AccountAuthService {
         userIp,
       });
 
+    /** Данные браузера для сессии */
     const browserData = Object.values(userAgentData?.browser as IBrowser)
       .map((browserDataItem) => {
         return browserDataItem ?? '';
       })
       .join(' ');
+    /** Данные процессора для сессии */
     const cpuArchitecture = Object.values(userAgentData?.cpu as ICPU)
       .map((cpuArchitectureItem) => {
         return cpuArchitectureItem ?? '';
       })
       .join(' ');
+    /** Данные устройства для сессии */
     const deviceData = Object.values(userAgentData?.device as ICPU)
       .map((deviceDataItem) => {
         return deviceDataItem ?? '';
       })
       .join(' ');
+    /** Данные операционной системы для сессии */
     const osData = Object.values(userAgentData?.os as ICPU)
       .map((osDataItem) => {
         return osDataItem ?? '';
       })
       .join(' ');
 
+    /** Результат сохранения сесиии */
     const resultSavedToken = this.createOrUpdateSessionService.createOrUpdate({
       accountId: resultRead.adapt?.id as string,
       browserData,

@@ -35,6 +35,7 @@ export class ValidateTokensService {
     }
 
     try {
+      /** Данные расшировки токена */
       const validateData = jsonwebtoken.verify(
         token,
         type === 'refreshToken' ? refreshKey : accessKey

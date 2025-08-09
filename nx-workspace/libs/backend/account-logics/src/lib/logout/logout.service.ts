@@ -46,6 +46,7 @@ export class AccountLogoutService {
       };
     }
 
+    /** Данные удаленной сессии */
     const sessionHasDeleted =
       await this.removeTokensService.removeSessionByRefreshToken(refreshToken);
 

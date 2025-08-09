@@ -71,6 +71,7 @@ export class RemoveSessionService {
       };
     }
 
+    /** Результат удаления сессии */
     const resultDeleted = await this.sessionAdapterService.remove(
       resultRead.adapt?.id as string
     );
