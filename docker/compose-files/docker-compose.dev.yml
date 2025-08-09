@@ -51,7 +51,6 @@ services:
     platform: linux/amd64 # Для корректной работы на arm системах надо явно указать линковку 64 бит
     restart: unless-stopped # Если оборудование где запущены докер контейнеры упало, то Docker после запуска системы посмотрит и поднимет только в случае если контейнер работал до подения
     environment: # Переменные среды внутри контейнера nestbackend_kubagame_dev
-      - NX_DAEMON=true
       - CHOKIDAR_USEPOLLING=true
       - MYSQL_HOST_AND_NAME_DATABASE=mysql_kubagame_dev
       - MYSQL_PORT=${MYSQL_PORT}
@@ -62,14 +61,10 @@ services:
       - REFRESH_KEY_JWT=${REFRESH_KEY_JWT}
       - REFRESH_TOKEN_LIFETIME=${REFRESH_TOKEN_LIFETIME}
     volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
-      - ./../../nx-workspace/apps/nest-backend:/nestbackend_kubagame_workspace/nx-workspace/apps/nest-backend:rw
-      - ./../../nx-workspace/apps/nest-backend-e2e:/nestbackend_kubagame_workspace/nx-workspace/apps/nest-backend-e2e:rw
-      - ./../../nx-workspace/libs/backend:/nestbackend_kubagame_workspace/nx-workspace/libs/backend:rw
-      - ./../../nx-workspace/libs/common:/nestbackend_kubagame_workspace/nx-workspace/libs/common:rw
-      - ./../../nx-workspace/tsconfig.base.json:/nestbackend_kubagame_workspace/nx-workspace/tsconfig.base.json
+      - ./../../nest-backend/src:/nest-backend/src:rw
       # TODO: ElmirKuba 2025-07-28: Расскоментировать строку ниже когда потребуется создаваемые backend частью проекта файлы сохранять между перезапусками контейнеров отдавая их на хостовую машину
-      # - ./../../nx-workspace/uploads:/nestbackend_kubagame_workspace/nx-workspace/uploads:rw
-    command: sh -c "sleep 30s && npm run backend:watch --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
+      # - ./../../nest-backend/uploads:/nest-backend/uploads:rw
+    command: sh -c "sleep 30s && npm run start:debug --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
     expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
       - ${BACKEND_PORT}
     ports: # Прокидывание портов наружу из контейнера Docker
