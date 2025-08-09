@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CreateOrUpdateSessionService } from './create-session.service';
-import { OrmRepositoriesModule } from '@backend/orm-repositories';
+import { SessionAdapterModule } from '@backend/adapters-repos';
 
 /** Модуль создания сессии */
 @Module({
-  imports: [OrmRepositoriesModule],
+  imports: [SessionAdapterModule],
   exports: [CreateOrUpdateSessionService],
   controllers: [],
   providers: [CreateOrUpdateSessionService],

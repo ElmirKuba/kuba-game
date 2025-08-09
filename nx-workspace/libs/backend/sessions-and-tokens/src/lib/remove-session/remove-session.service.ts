@@ -1,8 +1,8 @@
+import { SessionAdapterService } from '@backend/adapters-repos';
 import {
   EnumerationErrorCodes,
   SystemResult,
 } from '@backend/interfaces/systems';
-import { SessionsRepositoryService } from '@backend/orm-repositories';
 import { Injectable, Logger } from '@nestjs/common';
 
 /** Сервис модуля для работы с удалением сессии */
@@ -16,9 +16,9 @@ export class RemoveSessionService {
 
   /**
    * Конструктор сервиса системы
-   * @param {SessionsRepositoryService} sessionsRepositoryService — Экземпляр репозитория для работы с сущностью Sessions
+   * @param {SessionAdapterService} sessionAdapterService — Экземпляр адаптера репозитория создания сессии
    */
-  constructor(private sessionsRepositoryService: SessionsRepositoryService) {}
+  constructor(private sessionAdapterService: SessionAdapterService) {}
 
   /**
    * Метод удаления сессии по токену обновления
@@ -50,7 +50,7 @@ export class RemoveSessionService {
     }
 
     /** Результат нахождения сессии в таблице сессий в СуБД */
-    const resultRead = await this.sessionsRepositoryService.readOneBySlug([
+    const resultRead = await this.sessionAdapterService.readOneBySlug([
       {
         columnName: 'refreshToken',
         columnValue: refreshToken,
@@ -71,8 +71,8 @@ export class RemoveSessionService {
       };
     }
 
-    const resultDeleted = await this.sessionsRepositoryService.remove(
-      resultRead.data?.id as string
+    const resultDeleted = await this.sessionAdapterService.remove(
+      resultRead.adapt?.id as string
     );
 
     if (resultDeleted.error) {

@@ -15,11 +15,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backend/adapters-repos": [
+        "libs/backend/adapters-repositories/src/index.ts"
+      ],
       "@backend/api-endpoints": ["libs/backend/api-endpoints/src/index.ts"],
       "@backend/dtos/input": ["libs/backend/dtos/input-dtos/src/index.ts"],
       "@backend/dtos/output": ["libs/backend/dtos/output-dtos/src/index.ts"],
       "@backend/filters": ["libs/backend/filters/src/index.ts"],
       "@backend/guards": ["libs/backend/guards/src/index.ts"],
+      "@backend/interfaces/adapters": [
+        "libs/backend/interfaces/adapters-interfaces/src/index.ts"
+      ],
       "@backend/interfaces/api": [
         "libs/backend/interfaces/api-interfaces/src/index.ts"
       ],

@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AccountsRepositoryService } from '@backend/orm-repositories';
 import { IAccountPure } from '@common/interfaces/pure-and-base';
-import { SystemResult } from '@backend/interfaces/systems';
-import { EnumerationErrorCodes } from '@backend/interfaces/systems';
-import { RepositoryResult } from '@backend/interfaces/orm-repositories';
-import { IAccountFull } from '@common/interfaces/full';
+import {
+  EnumerationErrorCodes,
+  SystemResult,
+} from '@backend/interfaces/systems';
 import * as bcrypt from 'bcrypt';
 import * as iconv from 'iconv-lite';
+import { AccountAdapterService } from '@backend/adapters-repos';
+import { AdapterResultRepo } from '@backend/interfaces/adapters';
+import { IAccountFull } from '@common/interfaces/full';
 
 /** Сервис модуля системы создания аккаунтов */
 @Injectable()
@@ -19,9 +21,9 @@ export class AccountCreateService {
 
   /**
    * Конструктор сервиса системы
-   * @param {AccountsRepositoryService} accountsRepositoryService — Экземпляр репозитория для работы с сущностью Accounts
+   * @param {AccountAdapterService} accountAdapterService — Экземпляр адаптера репозитория создания аккаунтов
    */
-  constructor(private accountsRepositoryService: AccountsRepositoryService) {}
+  constructor(private accountAdapterService: AccountAdapterService) {}
 
   /**
    * Метод создания аккаунта
@@ -38,13 +40,13 @@ export class AccountCreateService {
     const successMessages: string[] = [];
 
     /** Результаты чтения аккаунта */
-    const resultRead: RepositoryResult<IAccountFull | null> =
-      await this.accountsRepositoryService.readOneBySlug({
+    const resultRead: AdapterResultRepo<IAccountFull | null> =
+      await this.accountAdapterService.readOneBySlug({
         columnName: 'login',
         columnValue: dataForNewAccount.login,
       });
 
-    if (!resultRead.error && resultRead.data) {
+    if (!resultRead.error && resultRead.adapt) {
       errorMessages.push(
         `Аккаунт с логином "${dataForNewAccount.login}" уже существует!`
       );
@@ -76,8 +78,8 @@ export class AccountCreateService {
     const tempBcryptHashPassword = bcrypt.hashSync(passwordByCp1251, 8);
 
     /** Результаты создания аккаунта */
-    const resultCreate: RepositoryResult<null> =
-      await this.accountsRepositoryService.create({
+    const resultCreate: AdapterResultRepo<null> =
+      await this.accountAdapterService.create({
         ...dataForNewAccount,
         password: tempBcryptHashPassword,
       });

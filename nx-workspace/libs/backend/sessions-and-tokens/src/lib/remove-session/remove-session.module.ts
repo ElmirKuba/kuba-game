@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { RemoveSessionService } from './remove-session.service';
-import { OrmRepositoriesModule } from '@backend/orm-repositories';
+import { SessionAdapterModule } from '@backend/adapters-repos';
 
 /** Модуль для работы с удалением сессии */
 @Module({
-  imports: [OrmRepositoriesModule],
+  imports: [SessionAdapterModule],
   exports: [RemoveSessionService],
   controllers: [],
   providers: [RemoveSessionService],

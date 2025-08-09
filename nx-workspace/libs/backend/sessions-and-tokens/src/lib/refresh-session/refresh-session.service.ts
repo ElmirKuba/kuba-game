@@ -2,9 +2,9 @@ import {
   EnumerationErrorCodes,
   SystemResult,
 } from '@backend/interfaces/systems';
-import { SessionsRepositoryService } from '@backend/orm-repositories';
 import { Injectable, Logger } from '@nestjs/common';
 import { ValidateTokensService } from '../validate-tokens/validate-tokens.service';
+import { SessionAdapterService } from '@backend/adapters-repos';
 
 /** Сервис модуля для работы с обновлением сессии */
 @Injectable()
@@ -17,11 +17,11 @@ export class RefreshSessionService {
 
   /**
    * Конструктор сервиса системы
-   * @param {SessionsRepositoryService} sessionsRepositoryService — Экземпляр репозитория для работы с сущностью Sessions
+   * @param {SessionAdapterService} sessionAdapterService — Экземпляр сервиса модуля адаптера репозитория для сессий
    * @param {ValidateTokensService} validateTokensService — Экземпляр сервиса модуля валидации JWT токенов
    */
   constructor(
-    private sessionsRepositoryService: SessionsRepositoryService,
+    private sessionAdapterService: SessionAdapterService,
     private validateTokensService: ValidateTokensService // private accountReadService: AccountReadService
   ) {}
 
@@ -52,7 +52,7 @@ export class RefreshSessionService {
     }
 
     /** Результат нахождения сессии в таблице сессий в СуБД */
-    const resultRead = await this.sessionsRepositoryService.readOneBySlug([
+    const resultRead = await this.sessionAdapterService.readOneBySlug([
       {
         columnName: 'refreshToken',
         columnValue: refreshToken,

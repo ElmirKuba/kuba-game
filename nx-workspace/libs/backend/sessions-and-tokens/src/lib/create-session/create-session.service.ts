@@ -1,8 +1,8 @@
-import { SessionsRepositoryService } from '@backend/orm-repositories';
 import { ISessionBase } from '@common/interfaces/pure-and-base';
 import { Injectable, Logger } from '@nestjs/common';
 import { SystemResult } from '@backend/interfaces/systems';
 import { EnumerationErrorCodes } from '@backend/interfaces/systems';
+import { SessionAdapterService } from '@backend/adapters-repos';
 
 /** Сервис модуля создания или обновления сессии */
 @Injectable()
@@ -15,9 +15,9 @@ export class CreateOrUpdateSessionService {
 
   /**
    * Конструктор сервиса системы
-   * @param {SessionsRepositoryService} sessionsRepositoryService — Экземпляр репозитория для работы с сущностью Sessions
+   * @param {SessionAdapterService} sessionAdapterService — Экземпляр адаптера репозитория создания сессии
    */
-  constructor(private sessionsRepositoryService: SessionsRepositoryService) {}
+  constructor(private sessionAdapterService: SessionAdapterService) {}
 
   /**
    * Метод создания или обновления сессии
@@ -36,7 +36,7 @@ export class CreateOrUpdateSessionService {
     const successMessages: string[] = [];
 
     /** Результат нахождения сессии в таблице сессий в СуБД */
-    const resultRead = await this.sessionsRepositoryService.readOneBySlug([
+    const resultRead = await this.sessionAdapterService.readOneBySlug([
       {
         columnName: 'ip',
         columnValue: dataSessionForCreateOrUpdate.ip,
@@ -48,7 +48,7 @@ export class CreateOrUpdateSessionService {
     ]);
 
     if (resultRead.error) {
-      const resultCreated = await this.sessionsRepositoryService.create(
+      const resultCreated = await this.sessionAdapterService.create(
         dataSessionForCreateOrUpdate
       );
 
@@ -78,8 +78,8 @@ export class CreateOrUpdateSessionService {
       };
     }
 
-    const resultUpdated = await this.sessionsRepositoryService.update({
-      id: resultRead.data?.id as string,
+    const resultUpdated = await this.sessionAdapterService.update({
+      id: resultRead.adapt?.id as string,
       sessionData: dataSessionForCreateOrUpdate,
     });
 
