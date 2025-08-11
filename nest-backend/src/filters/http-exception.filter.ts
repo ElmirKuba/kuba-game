@@ -7,7 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { ApiResult } from 'src/interfaces/api/api-interfaces';
+import { ApiResult } from '../interfaces/api/api-interfaces';
 
 /** Контракт стандартного тела ответа из HttpException.getResponse() */
 interface StandardErrorPayload {

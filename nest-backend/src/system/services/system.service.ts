@@ -24,8 +24,9 @@ export class SystemService implements OnModuleInit {
   /**
    * Хук, вызываемый при инициализации модуля
    * @returns {Promise<void>} - Ничего не возвращает
+   * @public
    * */
-  async onModuleInit() {
+  public async onModuleInit(): Promise<void> {
     try {
       /** Временная метка начала запроса */
       const start = Date.now();
@@ -40,8 +41,9 @@ export class SystemService implements OnModuleInit {
   /**
    * Метод запуска миграции в базу данных
    * @returns {string[]} - Результат миграции схем в базу данных
+   * @public
    * */
-  devMigrate(): string[] {
+  public devMigrate(): string[] {
     /** Массив для лога сообщений метода */
     const messages: string[] = [];
 

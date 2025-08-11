@@ -1,7 +1,7 @@
-import { SystemResult } from '../systems/systems-result.interface';
+import { UseCaseResult } from '../systems/use-case-result.interface';
 
 /** Интерфейс ответа от API */
 export type ApiResult<ResultType = Record<string, unknown>> = Pick<
-  SystemResult<ResultType>,
+  UseCaseResult<ResultType>,
   'error' | 'successMessages' | 'errorMessages' | 'data'
 >;

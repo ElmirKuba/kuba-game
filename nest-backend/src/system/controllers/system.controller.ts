@@ -13,9 +13,10 @@ export class SystemController {
   /**
    * Системное API запуска миграции в базу данных
    * @returns {string[]} - Результат миграции схем в базу данных
+   * @public
    * */
   @Get('dev/migrate')
-  devMigrate(): string[] {
+  public devMigrate(): string[] {
     const resultMigrateMessages = this.systemService.devMigrate();
 
     return resultMigrateMessages;

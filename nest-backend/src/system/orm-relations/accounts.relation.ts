@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm';
-import { accountsSchema } from '../orm-schemas/accounts.schema';
+import { accountSchema } from '../orm-schemas/account.schema';
 import { sessionsSchema } from '../orm-schemas/sessions.schema';
 
 /** Связь: один аккаунт может иметь много сессий */
-export const accountsRelations = relations(accountsSchema, (params) => {
+export const accountsRelations = relations(accountSchema, (params) => {
   return {
     sessions: params.many(sessionsSchema),
   };

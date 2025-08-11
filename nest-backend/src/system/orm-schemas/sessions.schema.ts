@@ -1,8 +1,8 @@
-import { ISessionFull } from 'src/interfaces/full/session/session-full.interface';
 import { defineTableWithSchema } from '../utils/define-table.helper';
 import { varchar } from 'drizzle-orm/mysql-core';
-import { accountsSchema } from './accounts.schema';
+import { accountSchema } from './account.schema';
 import { text } from 'drizzle-orm/mysql-core';
+import { ISessionFull } from '../../interfaces/full/session/session-full.interface';
 
 /** Схема таблицы сессий аккаунта */
 export const sessionsSchema = defineTableWithSchema<ISessionFull>('sessions', {
@@ -10,7 +10,7 @@ export const sessionsSchema = defineTableWithSchema<ISessionFull>('sessions', {
   accountId: varchar('account_id', { length: 50 })
     .notNull()
     .references(() => {
-      return accountsSchema.id;
+      return accountSchema.id;
     }),
   refreshToken: text('refresh_token', {}).notNull(),
   ua: text('ua'),

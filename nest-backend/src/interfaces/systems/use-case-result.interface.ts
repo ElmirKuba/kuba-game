@@ -1,7 +1,7 @@
 import { EnumerationErrorCodes } from './error-codes.interface';
 
-/** Результат работы системы */
-export interface SystemResult<ResultType = Record<string, unknown>> {
+/** Результат работы логики уровня UseCase */
+export interface UseCaseResult<ResultType = Record<string, unknown>> {
   /** Признак наличия или отсутствия ошибки работы системы с репозиторием */
   error: boolean;
   /** Код ошибки при наличии */

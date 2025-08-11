@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DrizzleMySqlModule } from '@knaadh/nestjs-drizzle-mysql2';
 import { SystemController } from './controllers/system.controller';
 import { SystemService } from './services/system.service';
-import { accountsSchema } from './orm-schemas/accounts.schema';
+import { accountSchema } from './orm-schemas/account.schema';
 import { sessionsSchema } from './orm-schemas/sessions.schema';
 import { accountsRelations } from './orm-relations/accounts.relation';
 import { sessionsRelations } from './orm-relations/sessions.relation';
@@ -26,7 +26,7 @@ import { sessionsRelations } from './orm-relations/sessions.relation';
       config: {
         schema: {
           // Схемы
-          accountsSchema,
+          accountSchema,
           sessionsSchema,
           // Связи
           accountsRelations,
