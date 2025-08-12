@@ -120,6 +120,18 @@ export class AccountAuthUseCaseService {
       refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50RHRvIjp7ImlkIjoiNTdmZTdjNmQtODUwYy00MDIwLWJjNGItMDcwNWY5Nzc5NTQ2XzE3NTUwMjA5MzI0MDkiLCJsb2dpbiI6IlRlc3RBY2NvdW50In0sInVzZXJBZ2VudERhdGEiOnsidWEiOiJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xNV83KSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvMTM1LjAuMC4wIFNhZmFyaS81MzcuMzYgT1BSLzEyMC4wLjAuMCIsImJyb3dzZXIiOnsibmFtZSI6Ik9wZXJhIiwidmVyc2lvbiI6IjEyMC4wLjAuMCIsIm1ham9yIjoiMTIwIn0sImNwdSI6e30sImRldmljZSI6eyJtb2RlbCI6Ik1hY2ludG9zaCIsInZlbmRvciI6IkFwcGxlIn0sImVuZ2luZSI6eyJuYW1lIjoiQmxpbmsiLCJ2ZXJzaW9uIjoiMTM1LjAuMC4wIn0sIm9zIjp7Im5hbWUiOiJtYWNPUyIsInZlcnNpb24iOiIxMC4xNS43In19LCJ1c2VySXAiOiIxOTIuMTY4Ljk3LjEiLCJ0b2tlblR5cGUiOiJyZWZyZXNoVG9rZW4iLCJpYXQiOjE3NTUwMjQ5NjYsImV4cCI6MTc1NzYxNjk2Nn0.t_SwhoNHLB5QfCn_dTRodqK6scQEpo6ijN52k8OGUVo',
       ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 OPR/120.0.0.0'
     }
+    
+    Результат сохранения сесиии
+    const resultSavedToken = this.createOrUpdateSessionService.createOrUpdate({
+      accountId: resultRead.adapt?.id as string,
+      browserData,
+      cpuArchitecture,
+      deviceData,
+      ip: userIp as string,
+      osData,
+      refreshToken: pairTokens.refreshToken,
+      ua: userAgentData?.ua as string,
+    });
     */
 
     return {
