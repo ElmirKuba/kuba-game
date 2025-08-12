@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ApiAccountModule } from './modules/api-account.module';
+import { ApiAccountModule } from './account/api-account.module';
 
 /** Модуль всех REST-API эндпоинтов */
 @Module({

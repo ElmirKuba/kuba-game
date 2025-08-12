@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { IAccountPure } from '../../../interfaces/pure-and-base/account/account-pure.interface';
 import { UseCaseResult } from '../../../interfaces/systems/use-case-result.interface';
-import { EnumerationErrorCodes } from '../../../interfaces/systems/error-codes.interface';
 import { AccountReadManagerService } from '../../../managers-level/account/read/account-read.manager.service';
+import { AccountCreateManagerService } from '../../../managers-level/account/create/account-create.manager.service';
 
 /** Сервис модуля бизнес логики уровня UseCase создания аккаунта */
 @Injectable()
@@ -16,8 +16,12 @@ export class AccountCreateUseCaseService {
   /**
    * Конструктор сервиса системы
    * @param {AccountReadManagerService} accountReadManagerService - Экземпляр сервиса модуля бизнес логики уровня Manager чтения аккаунта
+   * @param {AccountCreateManagerService} accountCreateManagerService - Экземпляр сервиса модуля бизнес логики уровня Manager создания аккаунта
    **/
-  constructor(private accountReadManagerService: AccountReadManagerService) {}
+  constructor(
+    private accountReadManagerService: AccountReadManagerService,
+    private accountCreateManagerService: AccountCreateManagerService,
+  ) {}
 
   /**
    * Метод создания аккаунта
@@ -28,11 +32,6 @@ export class AccountCreateUseCaseService {
   public async create(
     dataForNewAccount: IAccountPure,
   ): Promise<UseCaseResult<null>> {
-    /** Массив сообщений для ошибок */
-    const errorMessages: string[] = [];
-    /** Массив сообщений для успеха */
-    const successMessages: string[] = [];
-
     /** Результат чтения аккаунта до момента его создания */
     const resultReadBeforeCreate =
       await this.accountReadManagerService.readBeforeCreate(dataForNewAccount);
@@ -44,14 +43,22 @@ export class AccountCreateUseCaseService {
       };
     }
 
-    console.log('>>resultReadBeforeCreate>>', resultReadBeforeCreate);
+    /** Результат чтения аккаунта до момента его создания */
+    const resultCreatedNonExistingAccount =
+      await this.accountCreateManagerService.createNonExistingAccount(
+        dataForNewAccount,
+      );
+
+    if (resultCreatedNonExistingAccount.error) {
+      return {
+        ...resultCreatedNonExistingAccount,
+        data: null,
+      };
+    }
 
     return {
-      error: false,
+      ...resultCreatedNonExistingAccount,
       data: null,
-      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
-      errorMessages,
-      successMessages,
     };
   }
 }

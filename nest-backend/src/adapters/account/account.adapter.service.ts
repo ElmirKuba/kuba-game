@@ -29,6 +29,7 @@ export class AccountAdapterService {
     /** Результаты создания аккаунта */
     const resultCreate: ResultQueryRepository<null> =
       await this.accountDrizzleRepositoryService.create(dataForNewAccount);
+
     return {
       error: resultCreate.error,
       adaptData: resultCreate.data,

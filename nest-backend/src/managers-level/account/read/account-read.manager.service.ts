@@ -21,6 +21,12 @@ export class AccountReadManagerService {
    **/
   constructor(private accountAdapterService: AccountAdapterService) {}
 
+  /**
+   * Прочитать аккаунт до создания
+   * @param {IAccountPure} dataForNewAccount - Данные для создания аккаунта
+   * @returns {Promise<ManagerResult<IAccountFull | null>>} - Результат чтения аккаунта до момента его создания
+   * @public
+   * */
   public async readBeforeCreate(
     dataForNewAccount: IAccountPure,
   ): Promise<ManagerResult<IAccountFull | null>> {
@@ -54,6 +60,10 @@ export class AccountReadManagerService {
       };
     }
 
+    successMessages.push(
+      `Аккаунт с логином "${dataForNewAccount.login}" не найден!`,
+    );
+
     this.logger.log(
       `AccountReadManagerService -> readBeforeCreate : Аккаунт с логином ${dataForNewAccount.login} сможет быть создан. Причина: логин свободен`,
     );
@@ -64,6 +74,63 @@ export class AccountReadManagerService {
       errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
       errorMessages,
       successMessages,
+    };
+  }
+
+  /**
+   * Прочитать аккаунт до авторизации
+   * @param {IAccountPure} dataAccountPure - Данные для авторизации аккаунта
+   */
+  public async readBeforeAuth(
+    dataAccountPure: IAccountPure,
+  ): Promise<ManagerResult<IAccountFull | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результаты чтения аккаунта */
+    const resultRead: AdapterResultRepo<IAccountFull | null> =
+      await this.accountAdapterService.readOneBySlug({
+        columnName: 'login',
+        columnValue: dataAccountPure.login,
+      });
+
+    if (resultRead.error && !resultRead.adaptData) {
+      errorMessages.push(
+        `Аккаунт с логином "${dataAccountPure.login}" не существует`,
+      );
+      successMessages.push(
+        `Передайте другой логин, чтобы вновь попробовать авторизоваться`,
+      );
+
+      this.logger.error(
+        `AccountReadManagerService -> readBeforeAuth : Аккаунт с логином ${dataAccountPure.login} не сможет быть авторизован. Причина: логин не найден`,
+      );
+
+      return {
+        error: true,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+        errorMessages,
+        successMessages,
+        data: null,
+      };
+    }
+
+    successMessages.push(
+      `Аккаунт с логином "${dataAccountPure.login}" найден!`,
+    );
+
+    this.logger.log(
+      `AccountReadManagerService -> readBeforeAuth : Аккаунт с логином ${dataAccountPure.login} сможет быть авторизован. Причина: логин найден`,
+    );
+
+    return {
+      error: false,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      errorMessages,
+      successMessages,
+      data: resultRead.adaptData,
     };
   }
 }
