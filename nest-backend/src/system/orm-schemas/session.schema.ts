@@ -5,7 +5,7 @@ import { text } from 'drizzle-orm/mysql-core';
 import { ISessionFull } from '../../interfaces/full/session/session-full.interface';
 
 /** Схема таблицы сессий аккаунта */
-export const sessionsSchema = defineTableWithSchema<ISessionFull>('sessions', {
+export const sessionSchema = defineTableWithSchema<ISessionFull>('sessions', {
   id: varchar('id', { length: 50 }).primaryKey().notNull(),
   accountId: varchar('account_id', { length: 50 })
     .notNull()

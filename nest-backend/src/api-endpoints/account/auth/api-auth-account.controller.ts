@@ -67,22 +67,22 @@ export class ApiAuthAccountController {
       throw new HttpException(returned, HttpStatus.UNAUTHORIZED);
     }
 
-    // const { accessToken, refreshToken } = resultAuth.data.tokens;
+    const { accessToken, refreshToken } = resultAuth.data.tokens;
 
-    // res.cookie('accessToken', accessToken, {
-    //   httpOnly: true,
-    //   secure: process.env['NODE_ENV'] === 'production',
-    //   sameSite: 'lax',
-    //   maxAge: 1000 * 20,
-    //   path: '/',
-    // });
-    // res.cookie('refreshToken', refreshToken, {
-    //   httpOnly: true,
-    //   secure: process.env['NODE_ENV'] === 'production',
-    //   sameSite: 'lax',
-    //   maxAge: 1000 * 60 * 60 * 24 * 30,
-    //   path: '/',
-    // });
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 20,
+      path: '/',
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      path: '/',
+    });
 
     return returned;
   }

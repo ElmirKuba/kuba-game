@@ -18,8 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "drizzle:generate": "drizzle-kit generate --config=libs/backend/orm-schemas/src/lib/configs/drizzle.config.ts",
-    "drizzle:migrate": "drizzle-kit migrate --config=libs/backend/orm-schemas/src/lib/configs/drizzle.config.ts",
+    "drizzle:generate": "drizzle-kit generate --config=src/system/orm-configs/drizzle.config.ts",
+    "drizzle:migrate": "drizzle-kit migrate --config=src/system/orm-configs/drizzle.config.ts",
     "drizzle:push": "npm run drizzle:generate && npm run drizzle:migrate"
   },
   "dependencies": {

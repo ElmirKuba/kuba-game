@@ -3,9 +3,9 @@ import { DrizzleMySqlModule } from '@knaadh/nestjs-drizzle-mysql2';
 import { SystemController } from './controllers/system.controller';
 import { SystemService } from './services/system.service';
 import { accountSchema } from './orm-schemas/account.schema';
-import { sessionsSchema } from './orm-schemas/sessions.schema';
-import { accountsRelations } from './orm-relations/accounts.relation';
-import { sessionsRelations } from './orm-relations/sessions.relation';
+import { sessionSchema } from './orm-schemas/session.schema';
+import { accountsRelations } from './orm-relations/account.relation';
+import { sessionRelations } from './orm-relations/session.relation';
 
 /** Основной системный модуль приложения NestJS */
 @Module({
@@ -27,10 +27,10 @@ import { sessionsRelations } from './orm-relations/sessions.relation';
         schema: {
           // Схемы
           accountSchema,
-          sessionsSchema,
+          sessionSchema,
           // Связи
           accountsRelations,
-          sessionsRelations,
+          sessionRelations,
         },
         mode: 'default',
         casing: 'camelCase',

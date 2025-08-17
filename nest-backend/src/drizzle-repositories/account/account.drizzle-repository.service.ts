@@ -19,7 +19,7 @@ export class AccountDrizzleRepositoryService {
   constructor(
     @InjectDrizzle('DRIZZLE_DB_MYSQL_ONE')
     private readonly db: MySql2Database<{
-      accounts: typeof accountSchema;
+      account: typeof accountSchema;
     }>,
   ) {}
 
