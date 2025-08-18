@@ -26,7 +26,7 @@ export class ApiCreateAccountController {
 
   /**
    * Создание нового аккаунта
-   * @returns {Promise<ApiResult< null>>} - Результат работы REST-API Post эндпоинта создания аккаунта
+   * @returns {Promise<ApiResult<null>>} - Результат работы REST-API Post эндпоинта создания аккаунта
    * @public
    **/
   @Post('create')

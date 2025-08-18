@@ -5,6 +5,7 @@ import { AllUseCaseModule } from './use-cases-level/all.use-case.module';
 import { AllManagerModule } from './managers-level/all.manager.module';
 import { AllAdaptersModule } from './adapters/all.adapter.module';
 import { AllDrizzleRepositoriesModule } from './drizzle-repositories/all.drizzle-repositories.module';
+import { AllUtilityLevelModule } from './utility-level/all.utility-level.module';
 
 /** Импорты системных модулей */
 const importsSystemsModules: Array<
@@ -36,6 +37,11 @@ const importsDrizzleRepositoriesModules: Array<
   Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
 > = [AllDrizzleRepositoriesModule];
 
+/** Импорты модулей-адаптеров */
+const importsUtilitiesModules: Array<
+  Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
+> = [AllUtilityLevelModule];
+
 /** Главный модуль NestJS приложения */
 @Module({
   imports: [
@@ -45,6 +51,7 @@ const importsDrizzleRepositoriesModules: Array<
     ...importsManagersModules,
     ...importsAdaptersModules,
     ...importsDrizzleRepositoriesModules,
+    ...importsUtilitiesModules,
   ],
   exports: [],
   controllers: [],
