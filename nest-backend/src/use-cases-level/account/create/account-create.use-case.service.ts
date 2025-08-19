@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IAccountPure } from '../../../interfaces/pure-and-base/account/account-pure.interface';
 import { UseCaseResult } from '../../../interfaces/systems/use-case-result.interface';
 import { AccountReadManagerService } from '../../../managers-level/account/read/account-read.manager.service';
@@ -7,12 +7,6 @@ import { AccountCreateManagerService } from '../../../managers-level/account/cre
 /** Сервис модуля бизнес логики уровня UseCase создания аккаунта */
 @Injectable()
 export class AccountCreateUseCaseService {
-  /**
-   * Логгер NestJS для вывода сообщений в консоль.
-   * @private
-   */
-  private readonly logger = new Logger(AccountCreateUseCaseService.name);
-
   /**
    * Конструктор сервиса системы
    * @param {AccountReadManagerService} accountReadManagerService - Экземпляр сервиса модуля бизнес логики уровня Manager чтения аккаунта

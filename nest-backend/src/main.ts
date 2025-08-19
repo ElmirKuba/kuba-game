@@ -15,9 +15,9 @@ import {
  * ✔ POST:   /api/account/create        - Создание аккаунта
  * ✔ POST:   /api/account/auth          - Авторизация аккаунта
  * ✔ POST:   /api/account/logout        - Выход из аккаунта
+ * ✔ POST:   /api/session/refresh       - Обновление AccessToken (если истёк)
  *
  * TODO: ElmirKuba 2025-08-04: Реализовать апишки описанные ниже:
- * !0. POST:   /api/session/refresh      - Обновление AccessToken (если истёк)
  * !1. PATCH:  /api/account/edit         - Редактирование аккаунта (например: логин, пароль)
  * !2. DELETE: /api/account/remove       - Удаление аккаунта (и всех сессий)
  * !3. GET:    /api/session/list         - Получение всех сессий текущего аккаунта
