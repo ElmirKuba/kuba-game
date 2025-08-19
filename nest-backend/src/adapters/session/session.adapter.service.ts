@@ -57,7 +57,15 @@ export class SessionAdapterService {
     };
   }
 
-  public async update(sessionUpdate: ISessionUpdate) {
+  /**
+   * Обновление сессии
+   * @param {ISessionUpdate} sessionUpdate - Данные сессии для обновления
+   * @returns {Promise<AdapterResultRepo<null>>} - Данные обновления сессии
+   * @public
+   */
+  public async update(
+    sessionUpdate: ISessionUpdate,
+  ): Promise<AdapterResultRepo<null>> {
     const resultUpdate = await this.sessionDrizzleRepositoryService.update({
       id: sessionUpdate.id,
       sessionData: sessionUpdate.sessionData,
@@ -65,7 +73,22 @@ export class SessionAdapterService {
 
     return {
       error: resultUpdate.error,
-      adapt: resultUpdate.data,
+      adaptData: resultUpdate.data,
+    };
+  }
+
+  /**
+   * Метод удаления найденной сессии
+   * @param {string} id - Идентификатор найденной сессии для удаления
+   * @returns {: Promise<AdapterResultRepo<null>>} - Данные удаленной сессии
+   * @public
+   */
+  public async delete(id: string): Promise<AdapterResultRepo<null>> {
+    const resultDelete = await this.sessionDrizzleRepositoryService.delete(id);
+
+    return {
+      error: resultDelete.error,
+      adaptData: resultDelete.data,
     };
   }
 }

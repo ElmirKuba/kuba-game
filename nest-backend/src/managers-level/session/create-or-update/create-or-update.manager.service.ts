@@ -22,8 +22,6 @@ export class CreateOrUpdateSessionManagerService {
    **/
   constructor(private sessionAdapterService: SessionAdapterService) {}
 
-  // SessionAdapterService
-
   public async createOrUpdate(
     dataSessionForCreateOrUpdate: ISessionBase,
   ): Promise<ManagerResult<ISessionFull | null>> {

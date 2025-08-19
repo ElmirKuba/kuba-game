@@ -121,7 +121,7 @@ export class SessionDrizzleRepositoryService {
   /**
    * Обновляет сессию по её ID
    * @param {ISessionUpdate} sessionUpdate - Данные сессии для обновления
-   * @returns {Promise<RepositoryResult<null>>} - Результат работы метода обновления сессии
+   * @returns {Promise<ResultQueryRepository<null>>} - Результат работы метода обновления сессии
    * @public
    */
   public async update(
@@ -135,6 +135,24 @@ export class SessionDrizzleRepositoryService {
 
     return {
       error: resultUpdated[0].affectedRows ? false : true,
+      data: null,
+    };
+  }
+
+  /**
+   * Удаляет сессию по ее ID
+   * @param {string} id - Идентификатор сессии для удаления
+   * @returns {Promise<RepositoryResult<null>>}
+   * @public
+   */
+  public async delete(id: string): Promise<ResultQueryRepository<null>> {
+    /** Результат удаления сессии */
+    const resultDeleted = await this.db
+      .delete(sessionSchema)
+      .where(eq(sessionSchema.id, id));
+
+    return {
+      error: resultDeleted[0].affectedRows ? false : true,
       data: null,
     };
   }
