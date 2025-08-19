@@ -1,9 +1,0 @@
-{
-  "name": "orm-schemas",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/backend/orm-schemas/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project orm-schemas --web",
-  "targets": {}
-}

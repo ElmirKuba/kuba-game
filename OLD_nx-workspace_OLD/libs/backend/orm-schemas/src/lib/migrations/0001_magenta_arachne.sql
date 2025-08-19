@@ -1,1 +1,0 @@
-ALTER TABLE `accounts` MODIFY COLUMN `password` varchar(60) NOT NULL;

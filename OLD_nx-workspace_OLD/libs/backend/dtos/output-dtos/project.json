@@ -1,9 +1,0 @@
-{
-  "name": "output-dtos",
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/backend/dtos/output-dtos/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project output-dtos --web",
-  "targets": {}
-}
