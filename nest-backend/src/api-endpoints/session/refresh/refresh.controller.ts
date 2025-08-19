@@ -2,6 +2,7 @@ import {
   Controller,
   Header,
   HttpCode,
+  HttpException,
   HttpStatus,
   Post,
   Req,
@@ -12,6 +13,8 @@ import { SessionRefreshUseCaseService } from '../../../use-cases-level/session/r
 import type { Response } from 'express';
 import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookies.interface';
+import { UAParser } from 'ua-parser-js';
+import { IAccountWithoutPassword } from '../../../interfaces/full/account/account-without-password.interface';
 
 /** Контроллер REST-API связанного с функционалом обновления сессии */
 @Controller('session')
@@ -38,7 +41,7 @@ export class ApiRefreshAccountController {
   public async refresh(
     @Req() req: ReqWithCookies,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ApiResult<null>> {
+  ): Promise<ApiResult<IAccountWithoutPassword | null>> {
     const incomingRefreshToken = req.cookies?.refreshToken;
 
     if (!incomingRefreshToken) {
@@ -47,19 +50,61 @@ export class ApiRefreshAccountController {
       );
     }
 
+    /** IP вызывающего REST API */
+    let userIp =
+      req.headers['x-forwarded-for']?.toString() || req.socket.remoteAddress;
+
+    if (typeof userIp === 'string' && userIp.startsWith('::ffff:')) {
+      userIp = userIp.replace('::ffff:', '');
+    }
+
+    /** User-Agent */
+    const userAgent = req.headers['user-agent'] || '';
+    /** Парсер User-Agent */
+    const parser = new UAParser(userAgent);
+    /** Распарсенные данные user-agent пользователя */
+    const userAgentData = parser.getResult();
+
     const resultRefreshSession =
-      await this.sessionRefreshUseCaseService.refresh(incomingRefreshToken);
+      await this.sessionRefreshUseCaseService.refresh(
+        incomingRefreshToken,
+        userAgentData,
+        userIp as string,
+      );
 
-    // console.log(
-    //   'ApiRefreshAccountController > refresh > resultRefreshSession',
-    //   resultRefreshSession,
-    // );
+    console.log(
+      'ApiRefreshAccountController > refresh > resultRefreshSession',
+      resultRefreshSession,
+    );
 
-    return {
-      error: false,
-      data: null,
-      errorMessages: [],
-      successMessages: [],
+    const returned: ApiResult<IAccountWithoutPassword> = {
+      error: resultRefreshSession.error,
+      successMessages: resultRefreshSession.successMessages,
+      errorMessages: resultRefreshSession.errorMessages,
+      data: resultRefreshSession.data?.account as IAccountWithoutPassword,
     };
+
+    if (resultRefreshSession.error || !resultRefreshSession.data) {
+      throw new HttpException(returned, HttpStatus.UNAUTHORIZED);
+    }
+
+    const { accessToken, refreshToken } = resultRefreshSession.data.tokens;
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 20,
+      path: '/',
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env['NODE_ENV'] === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      path: '/',
+    });
+
+    return returned;
   }
 }

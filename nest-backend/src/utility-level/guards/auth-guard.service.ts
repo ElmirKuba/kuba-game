@@ -52,12 +52,12 @@ export class AuthGuardService implements CanActivate {
           return errMes.includes('jwt expired');
         })
       ) {
-        throw new UnauthorizedException('Срок действия токена истёк');
+        throw new UnauthorizedException(
+          'Срок действия доступа истек, сессию требуется обновить',
+        );
       }
 
-      throw new UnauthorizedException(
-        'AccessToken недействителен или подделан',
-      );
+      throw new UnauthorizedException('Доступ истек или был подделан');
     }
 
     request.authData = resultValidateAccessToken.data;

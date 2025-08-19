@@ -21,7 +21,7 @@ export class ReadSessionManagerService {
   /**
    * Чтение сессии до момента ее удаления
    * @param {string} refreshToken - Токен обновления пары токенов
-   * @returns {void}
+   * @returns {Promise<ManagerResult<ISessionFull | null>>}
    * @public
    */
   public async readBeforeDelete(
@@ -64,6 +64,63 @@ export class ReadSessionManagerService {
 
     this.logger.log(
       `ReadSessionManagerService -> readBeforeDelete : Сессия ${refreshToken} найдена, аккаунт может произвести выход!`,
+    );
+
+    return {
+      error: false,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      successMessages,
+      errorMessages,
+      data: resultRead.adaptData,
+    };
+  }
+
+  /**
+   * Чтение сессии до момента ее обновления
+   * @param {string} refreshToken - Токен обновления пары токенов
+   * @returns {Promise<ManagerResult<ISessionFull | null>>} - Данные обновления сессии
+   * @public
+   */
+  public async readBeforeUpdate(
+    refreshToken: string,
+  ): Promise<ManagerResult<ISessionFull | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результат нахождения сессии в таблице сессий в СуБД */
+    const resultRead = await this.sessionAdapterService.readOneBySlug([
+      {
+        columnName: 'refreshToken',
+        columnValue: refreshToken,
+      },
+    ]);
+
+    if (resultRead.error && !resultRead.adaptData) {
+      errorMessages.push(
+        'Сессия для аккаунта не найдена, аккаунт скорее всего не авторизован, сессия не нуждается в обновлении!',
+      );
+
+      this.logger.error(
+        `ReadSessionManagerService -> readBeforeUpdate : Сессия ${refreshToken} не найдена, она не может нуждаться в обновлении. Причина: Скорее всего аккаунт не авторизован`,
+      );
+
+      return {
+        error: true,
+        data: null,
+        errorMessages,
+        successMessages,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+      };
+    }
+
+    successMessages.push(
+      'Сессия для аккаунта найдена! Сессия может быть обновлена!',
+    );
+
+    this.logger.log(
+      `ReadSessionManagerService -> readBeforeUpdate : Сессия ${refreshToken} найдена, она может быть обновлена!`,
     );
 
     return {

@@ -20,10 +20,10 @@ export class DeleteSessionManagerService {
   /**
    * Метод удаления найденной сессии
    * @param {string} id - Идентификатор найденной сессии для удаления
-   * @returns {Promise<ManagerResult<ISessionFull | null>>} - Данные удаленной сессии
+   * @returns {Promise<ManagerResult<null>>} - Данные удаленной сессии
    * @public
    */
-  public async deleteExistingSession(id: string): Promise<ManagerResult<null>> {
+  public async delete(id: string): Promise<ManagerResult<null>> {
     /** Массив сообщений для ошибок */
     const errorMessages: string[] = [];
     /** Массив сообщений для успеха */
@@ -37,7 +37,7 @@ export class DeleteSessionManagerService {
       );
 
       this.logger.error(
-        `DeleteSessionManagerService -> deleteExistingSession : Идентификатор сессии "${id}" не сможет быть удален. Причина: внутренняя ошибка`,
+        `DeleteSessionManagerService -> delete : Идентификатор сессии "${id}" не сможет быть удален. Причина: внутренняя ошибка`,
       );
 
       return {
@@ -54,7 +54,7 @@ export class DeleteSessionManagerService {
     );
 
     this.logger.log(
-      `DeleteSessionManagerService -> deleteExistingSession : Сессия с идентификатором "${id}" была успешно удалена!`,
+      `DeleteSessionManagerService -> delete : Сессия с идентификатором "${id}" была успешно удалена!`,
     );
 
     return {

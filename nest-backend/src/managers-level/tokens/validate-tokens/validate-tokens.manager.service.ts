@@ -4,7 +4,7 @@ import { EnumerationErrorCodes } from '../../../interfaces/systems/error-codes.i
 import * as jsonwebtoken from 'jsonwebtoken';
 import { IPayloadForTokens } from '../../../interfaces/systems/payload-for-tokens.interface';
 
-/** Сервис модуля бизнес логики уровня Manager связанных с генерацией токенов */
+/** Сервис модуля бизнес логики уровня Manager связанных с валидацией токенов */
 @Injectable()
 export class ValidateTokensManagerService {
   /**

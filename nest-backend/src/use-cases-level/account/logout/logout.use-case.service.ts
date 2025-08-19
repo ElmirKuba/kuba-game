@@ -36,7 +36,7 @@ export class AccountLogoutUseCaseService {
     }
 
     const resultDeletedSessionAfterReading =
-      await this.deleteSessionManagerService.deleteExistingSession(
+      await this.deleteSessionManagerService.delete(
         resultReadBeforeDelete.data?.id as string,
       );
 

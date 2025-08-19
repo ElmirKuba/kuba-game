@@ -80,6 +80,8 @@ export class AccountReadManagerService {
   /**
    * Прочитать аккаунт до авторизации
    * @param {IAccountPure} dataAccountPure - Данные для авторизации аккаунта
+   * @returns {Promise<ManagerResult<IAccountFull | null>>} - Результат чтения аккаунта до момента его авторизации
+   * @public
    */
   public async readBeforeAuth(
     dataAccountPure: IAccountPure,
@@ -123,6 +125,60 @@ export class AccountReadManagerService {
 
     this.logger.log(
       `AccountReadManagerService -> readBeforeAuth : Аккаунт с логином ${dataAccountPure.login} сможет быть авторизован. Причина: логин найден`,
+    );
+
+    return {
+      error: false,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      errorMessages,
+      successMessages,
+      data: resultRead.adaptData,
+    };
+  }
+
+  /**
+   * Прочитать аккаунт имея его идентификатор
+   * @param {string} id - Идентификатор аккаунта для его чтения перед обновлением сессии
+   * @returns {Promise<ManagerResult<IAccountFull | null>>} - Результат чтения аккаунта по его идентификатору
+   * @public
+   */
+  public async readWithId(
+    id: string,
+  ): Promise<ManagerResult<IAccountFull | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результаты чтения аккаунта */
+    const resultRead = await this.accountAdapterService.readOneBySlug({
+      columnName: 'id',
+      columnValue: id,
+    });
+
+    if (resultRead.error && !resultRead.adaptData) {
+      errorMessages.push(`Аккаунт с идентификатором "${id}" не существует`);
+      successMessages.push(
+        `Передайте другой идентификатор, чтобы вновь попробовать найти аккаунт`,
+      );
+
+      this.logger.error(
+        `AccountReadManagerService -> readWithId : Аккаунт с идентификатором "${id}" не существует. Причина: запись не найдена в таблице аккаунтов в БД`,
+      );
+
+      return {
+        error: true,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+        errorMessages,
+        successMessages,
+        data: null,
+      };
+    }
+
+    successMessages.push(`Аккаунт с идентификатором "${id}" найден!`);
+
+    this.logger.log(
+      `AccountReadManagerService -> readWithId : Аккаунт с идентификатором "${id}" найден. Причина: аккаунт есть в таблице аккаунтов в БД`,
     );
 
     return {
