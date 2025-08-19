@@ -72,11 +72,6 @@ export class ApiRefreshAccountController {
         userIp as string,
       );
 
-    console.log(
-      'ApiRefreshAccountController > refresh > resultRefreshSession',
-      resultRefreshSession,
-    );
-
     const returned: ApiResult<IAccountWithoutPassword> = {
       error: resultRefreshSession.error,
       successMessages: resultRefreshSession.successMessages,
