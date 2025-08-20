@@ -35,7 +35,7 @@ export class AuthGuardService implements CanActivate {
 
     if (!accessToken) {
       throw new UnauthorizedException(
-        'Вашему аккаунту не требуется выполнять выход, он не авторизован!',
+        'У вас нет доступа к функционалу, вы не авторизованы!',
       );
     }
 

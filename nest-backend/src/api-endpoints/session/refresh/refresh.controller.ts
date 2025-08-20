@@ -29,9 +29,9 @@ export class ApiRefreshAccountController {
 
   /**
    * Метод обновления сессии
-   * @param {Request} req - Попутные данные при запросе на данное REST API
+   * @param {ReqWithCookies} req - Попутные данные при запросе на данное REST API
    * @param {Response} res - Попутные данные при ответе от данного REST API
-   * @returns {Promise<ApiResult<null>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
+   * @returns {Promise<ApiResult<IAccountWithoutPassword | null>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
    * @public
    */
   @Post('refresh')

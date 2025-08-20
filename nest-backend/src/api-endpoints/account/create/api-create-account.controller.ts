@@ -26,6 +26,7 @@ export class ApiCreateAccountController {
 
   /**
    * Создание нового аккаунта
+   * @param {AccountToInputDataDto} accountToInputDataDto - Провалидированные DTO`s данные аккаунта для создания аккаунта
    * @returns {Promise<ApiResult<null>>} - Результат работы REST-API Post эндпоинта создания аккаунта
    * @public
    **/

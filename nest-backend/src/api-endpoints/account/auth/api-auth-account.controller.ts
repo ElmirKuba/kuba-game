@@ -25,6 +25,14 @@ export class ApiAuthAccountController {
    */
   constructor(private accountAuthUseCaseService: AccountAuthUseCaseService) {}
 
+  /**
+   * REST-API Post эндпоинт авторизации аккаунта
+   * @param {Request} req - Технические данные идущие вместе с запросом
+   * @param {Response} res - Технические данные идущие вместе с ответом
+   * @param {AccountToInputDataDto} accountToInputDataDto - Провалидированные DTO`s данные аккаунта для авторизации
+   * @returns {Promise<ApiResult<IAccountWithoutPassword | null>>} - Результат работы REST API Post метода авторизации
+   * @public
+   */
   @Post('auth')
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')

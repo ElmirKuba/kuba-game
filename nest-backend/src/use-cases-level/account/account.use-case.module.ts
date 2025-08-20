@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AccountCreateUseCaseModule } from './create/account-create.use-case.module';
 import { AccountAuthUseCaseModule } from './auth/account-auth.use-case.module';
 import { AccountLogoutUseCaseModule } from './logout/logout.use-case.module';
+import { AccountReadUseCaseModule } from './read/read.use-case.module';
 
 /** Модуль всех модулей бизнес логики уровня UseCase связанных с аккаунтами */
 @Module({
@@ -9,6 +10,7 @@ import { AccountLogoutUseCaseModule } from './logout/logout.use-case.module';
     AccountCreateUseCaseModule,
     AccountAuthUseCaseModule,
     AccountLogoutUseCaseModule,
+    AccountReadUseCaseModule,
   ],
   exports: [],
   controllers: [],

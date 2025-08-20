@@ -28,7 +28,7 @@ export class ApiLogoutAccountController {
 
   /**
    * Метод выхода из аккаунта
-   * @param {Request} req - Попутные данные при запросе на данное REST API
+   * @param {ReqWithCookies} req - Попутные данные при запросе на данное REST API
    * @param {Response} res - Попутные данные при ответе от данного REST API
    * @returns {Promise<ApiResult<null>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
    * @public
@@ -50,9 +50,11 @@ export class ApiLogoutAccountController {
       );
     }
 
+    /** Результат работы сервиса бизнес логики уровня Use-Case выхода из аккаунта */
     const resultLogout =
       await this.accountLogoutUseCaseService.logout(incomingRefreshToken);
 
+    /** Формируем данные для отправки на Frontend */
     const result: ApiResult<null> = {
       error: resultLogout.error,
       errorMessages: resultLogout.errorMessages,
