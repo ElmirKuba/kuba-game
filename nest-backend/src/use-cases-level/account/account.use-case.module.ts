@@ -3,6 +3,7 @@ import { AccountCreateUseCaseModule } from './create/account-create.use-case.mod
 import { AccountAuthUseCaseModule } from './auth/account-auth.use-case.module';
 import { AccountLogoutUseCaseModule } from './logout/logout.use-case.module';
 import { AccountReadUseCaseModule } from './read/read.use-case.module';
+import { AccountUpdateUseCaseModule } from './update/update.use-case.module';
 
 /** Модуль всех модулей бизнес логики уровня UseCase связанных с аккаунтами */
 @Module({
@@ -11,6 +12,7 @@ import { AccountReadUseCaseModule } from './read/read.use-case.module';
     AccountAuthUseCaseModule,
     AccountLogoutUseCaseModule,
     AccountReadUseCaseModule,
+    AccountUpdateUseCaseModule,
   ],
   exports: [],
   controllers: [],
