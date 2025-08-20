@@ -247,4 +247,61 @@ export class AccountReadManagerService {
       data: resultRead.adaptData,
     };
   }
+
+  /**
+   * Проверка логина аккаунта на занятость
+   * @param {string} id - Логин аккаунта который требуется проверить
+   * @param {string} login - Логин аккаунта который требуется проверить
+   * @returns {Promise<ManagerResult<null>>} - Данные результата проверки логина аккаунта на занятость
+   * @public
+   */
+  public async checkLoginAvailability(
+    id: string,
+    login: string,
+  ): Promise<ManagerResult<null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результаты чтения аккаунта */
+    const resultRead = await this.accountAdapterService.readOneBySlug({
+      columnName: 'login',
+      columnValue: login,
+    });
+
+    if (!resultRead.error && resultRead.adaptData) {
+      errorMessages.push(
+        `Логин с идентификатором "${id}" не сможет занять логин "${login}" потому что он занят`,
+      );
+
+      this.logger.error(
+        `AccountReadManagerService -> checkLoginAvailability : Логин с идентификатором "${id}" не сможет занять логин "${login}". Причина: Логин "${login}" занят!`,
+      );
+
+      return {
+        error: true,
+        successMessages,
+        errorMessages,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_ALREADY_EXISTS,
+        data: null,
+      };
+    }
+
+    successMessages.push(
+      `Аккаунт с идентификатором "${id}" сможет сменить логин на "${login}", так как логин свободен.`,
+    );
+
+    this.logger.log(
+      `AccountReadManagerService -> checkLoginAvailability : Логин с идентификатором "${id}" сможет занять логин "${login}". Логин "${login}" свободен!`,
+    );
+
+    return {
+      error: false,
+      successMessages,
+      errorMessages,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+      data: null,
+    };
+  }
 }

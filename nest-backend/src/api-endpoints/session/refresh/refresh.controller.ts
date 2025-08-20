@@ -18,7 +18,7 @@ import { IAccountWithoutPassword } from '../../../interfaces/full/account/accoun
 
 /** Контроллер REST-API связанного с функционалом обновления сессии */
 @Controller('session')
-export class ApiRefreshAccountController {
+export class ApiRefreshSessionController {
   /**
    * Конструктор контроллера системы
    * @param {SessionRefreshUseCaseService} sessionRefreshUseCaseService - Экземпляр сервиса модуля бизнес логики уровня UseCase обновления сессии

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ApiRefreshAccountController } from './refresh.controller';
+import { ApiRefreshSessionController } from './refresh.controller';
 import { SessionRefreshUseCaseModule } from '../../../use-cases-level/session/refresh/refresh.use-case.module';
 
 /** Модуль REST-API контроллера связанного с функционалом обновления сессии */
 @Module({
   imports: [SessionRefreshUseCaseModule],
   exports: [],
-  controllers: [ApiRefreshAccountController],
+  controllers: [ApiRefreshSessionController],
   providers: [],
 })
-export class ApiRefreshAccountModule {}
+export class ApiRefreshSessionModule {}
