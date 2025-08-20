@@ -26,7 +26,7 @@ export class SessionAdapterService {
   public async readOneBySlug(
     selectionConditions: ReadQueryAdapter<ISessionFull>[],
   ): Promise<AdapterResultRepo<ISessionFull | null>> {
-    /** Результаты чтения аккаунта */
+    /** Результаты чтения сессии */
     const resultRead =
       await this.sessionDrizzleRepositoryService.readOneBySlug(
         selectionConditions,
@@ -35,6 +35,25 @@ export class SessionAdapterService {
     return {
       error: resultRead.error,
       adaptData: resultRead.data,
+    };
+  }
+
+  /**
+   * Чтение всех сессий аккаунта по его ID
+   * @param {string} accountId - Идентификатор аккаунта по которому нужен список всех его сессий
+   * @returns {} - Результат работы метода чтения всех сессий аккаунта по его идентификатора
+   * @public
+   */
+  public async readListByAccountId(
+    accountId: string,
+  ): Promise<AdapterResultRepo<ISessionFull[] | null>> {
+    /** Результаты чтения сессий */
+    const resultListRead =
+      await this.sessionDrizzleRepositoryService.readListByAccountId(accountId);
+
+    return {
+      error: resultListRead.error,
+      adaptData: resultListRead.data,
     };
   }
 

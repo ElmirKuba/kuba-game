@@ -24,10 +24,6 @@ import {
  * !5. DELETE: /api/session/:id          - Удаление конкретной сессии по ID
  * !6. POST:   /api/session/clear-others - Удаление всех сессий кроме текущей
  *
- * ! GET /api/session/list
- * Возвращает массив { id, ip, ua, osData, createdAt? }
- * Используется в личном кабинете
- *
  * ! DELETE /api/session/:id
  * Только если session.account_id === currentAccount.id
  * Удаляет указанную сессию

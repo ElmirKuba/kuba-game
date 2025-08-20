@@ -3,6 +3,7 @@ import { varchar } from 'drizzle-orm/mysql-core';
 import { accountSchema } from './account.schema';
 import { text } from 'drizzle-orm/mysql-core';
 import { ISessionFull } from '../../interfaces/full/session/session-full.interface';
+import { InferSelectModel } from 'drizzle-orm';
 
 /** Схема таблицы сессий аккаунта */
 export const sessionSchema = defineTableWithSchema<ISessionFull>('sessions', {
@@ -20,3 +21,6 @@ export const sessionSchema = defineTableWithSchema<ISessionFull>('sessions', {
   deviceData: text('device_data'),
   osData: text('os_data'),
 });
+
+/** Тип схемы сессий */
+export type SessionEntity = InferSelectModel<typeof sessionSchema>;

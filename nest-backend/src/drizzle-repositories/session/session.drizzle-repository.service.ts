@@ -91,6 +91,36 @@ export class SessionDrizzleRepositoryService {
   }
 
   /**
+   * Чтение всех сессий аккаунта по его ID
+   * @param {string} accountId - Идентификатор аккаунта по которому нужен список всех его сессий
+   * @returns {} - Результат работы метода чтения всех сессий аккаунта по его идентификатора
+   * @public
+   */
+  public async readListByAccountId(
+    accountId: string,
+  ): Promise<ResultQueryRepository<ISessionFull[] | null>> {
+    console.log('Чтение всех сессий аккаунта по его ID', accountId);
+
+    /** Результат чтения списка сессий */
+    const resultListRead = await this.db
+      .select()
+      .from(sessionSchema)
+      .where(eq(sessionSchema.accountId, accountId));
+
+    if (!resultListRead.length) {
+      return {
+        error: true,
+        data: null,
+      };
+    }
+
+    return {
+      error: false,
+      data: resultListRead as ISessionFull[],
+    };
+  }
+
+  /**
    * Создаёт новую сессию
    * @param {ISessionBase} sessionBase - Данные для создания сессии
    * @returns {Promise<ResultQueryRepository<null>>} - Результат создания сессии

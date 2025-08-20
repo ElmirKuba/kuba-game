@@ -131,4 +131,57 @@ export class ReadSessionManagerService {
       data: resultRead.adaptData,
     };
   }
+
+  /**
+   * Чтение всех сессий аккаунта по его ID
+   * @param {string} accountId - Идентификатор аккаунта по которому нужен список всех его сессий
+   * @returns {} - Результат работы метода чтения всех сессий аккаунта по его идентификатора
+   * @public
+   */
+  public async readListByAccountId(
+    accountId: string,
+  ): Promise<ManagerResult<ISessionFull[] | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результаты чтения сессий */
+    const resultListRead =
+      await this.sessionAdapterService.readListByAccountId(accountId);
+
+    if (resultListRead.error && !resultListRead.adaptData) {
+      errorMessages.push(
+        `Для аккаунта с идентификатором "${accountId}" не найдены сессии`,
+      );
+
+      this.logger.error(
+        `ReadSessionManagerService -> readListByAccountId : Для аккаунта с идентификатором "${accountId}" не найдены сессии`,
+      );
+
+      return {
+        error: true,
+        data: null,
+        errorMessages,
+        successMessages,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+      };
+    }
+
+    successMessages.push(
+      `Для аккаунта с идентификатором "${accountId}" были найдены сессии, количество: ${resultListRead.adaptData?.length}`,
+    );
+
+    this.logger.log(
+      `ReadSessionManagerService -> readListByAccountId : Для аккаунта с идентификатором "${accountId}" были найдены сессии, количество: ${resultListRead.adaptData?.length}`,
+    );
+
+    return {
+      error: false,
+      errorMessages,
+      successMessages,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      data: resultListRead.adaptData,
+    };
+  }
 }

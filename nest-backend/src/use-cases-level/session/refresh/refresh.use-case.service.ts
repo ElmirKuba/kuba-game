@@ -36,7 +36,7 @@ export class SessionRefreshUseCaseService {
    * Метод обновления сессии
    * @param {string} refreshToken - Токен обновления пары токенов JWT
    * @param {string} userIp - IP адрес пользователя который обновляет сессию
-   * @returns {} - Результат обновления пары токенов JWT
+   * @returns {Promise<UseCaseResult<AccountWithTokensAfterSuccessAuth | null>>} - Результат обновления пары токенов JWT
    * @public
    */
   public async refresh(
