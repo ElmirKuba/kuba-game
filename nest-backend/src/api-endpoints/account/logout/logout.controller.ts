@@ -63,6 +63,7 @@ export class ApiLogoutAccountController {
     };
 
     if (resultLogout.error) {
+      // TODO: ElmirKuba 2025-08-20: Разобраться UNAUTHORIZED тут или ветвление как в апи создания пароля
       throw new HttpException(result, HttpStatus.UNAUTHORIZED);
     }
 

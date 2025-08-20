@@ -5,6 +5,7 @@ import { AdapterResultRepo } from '../../interfaces/adapters/result-query.adapte
 import { AccountDrizzleRepositoryService } from '../../drizzle-repositories/account/account.drizzle-repository.service';
 import { ResultQueryRepository } from '../../interfaces/orm-repositories/result-query.repository.interface';
 import { IAccountPure } from '../../interfaces/pure-and-base/account/account-pure.interface';
+import { IAccountUpdate } from '../../interfaces/with-child/account/account-update.interface';
 
 /** Сервис модуля адаптера репозитория для аккаунтов */
 @Injectable()
@@ -18,7 +19,7 @@ export class AccountAdapterService {
   ) {}
 
   /**
-   * Создаёт нового пользователя.
+   * Создаёт нового пользователя в СуБД используя репозиторий схемы таблицы аккаунтов
    * @param {IAccountPure} dataForNewAccount — объект с полями login и password (id генерируется здесь)
    * @returns {Promise<AdapterResultRepo<null>>} - Результат создания аккаунта (true - успех | false - не получилось создать аккаунт)
    * @public
@@ -55,6 +56,25 @@ export class AccountAdapterService {
     return {
       error: resultRead.error,
       adaptData: resultRead.data,
+    };
+  }
+
+  /**
+   * Обновляет данные аккаунта в СуБД используя репозиторий схемы таблицы аккаунтов
+   * @param {IAccountUpdate} accountUpdateData - Данные аккаунта полученные от пользователя API за исключением при условии наличия пароля он уже будет захешированной версией cp1251
+   * @returns {Promise<AdapterResultRepo<null>>} - Результат работы метода адаптера который работает с методом обновления данных аккаунта репозитория
+   * @public
+   */
+  public async update(
+    accountUpdateData: IAccountUpdate,
+  ): Promise<AdapterResultRepo<null>> {
+    /** Результаты создания аккаунта */
+    const resultUpdate =
+      await this.accountDrizzleRepositoryService.update(accountUpdateData);
+
+    return {
+      error: resultUpdate.error,
+      adaptData: resultUpdate.data,
     };
   }
 }

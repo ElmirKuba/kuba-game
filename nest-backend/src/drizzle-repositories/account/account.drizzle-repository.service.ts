@@ -8,6 +8,7 @@ import { IAccountPure } from '../../interfaces/pure-and-base/account/account-pur
 import { ReadQueryRepository } from '../../interfaces/orm-repositories/read-query.repository.interface';
 import { IAccountFull } from '../../interfaces/full/account/account-full.interface';
 import { ResultQueryRepository } from '../../interfaces/orm-repositories/result-query.repository.interface';
+import { IAccountUpdate } from '../../interfaces/with-child/account/account-update.interface';
 
 /** Сервис модуля репозитория для работы данными аккаунта через схему аккаунта */
 @Injectable()
@@ -90,6 +91,27 @@ export class AccountDrizzleRepositoryService {
         login: resultRead[0].login as string,
         password: resultRead[0].password as string,
       },
+    };
+  }
+
+  /**
+   * Обновляет аккаунт в таблице СуБД
+   * @param {IAccountUpdate} accountUpdateData - Данные аккаунта полученные от пользователя API за исключением при условии наличия пароля он уже будет захешированной версией cp1251
+   * @returns {Promise<ResultQueryRepository<null>>} - Результат работы метода репозитория который обновляет данные аккаунта
+   * @public
+   */
+  public async update(
+    accountUpdateData: IAccountUpdate,
+  ): Promise<ResultQueryRepository<null>> {
+    /** Результат обновления аккаунта */
+    const resultUpdate = await this.db
+      .update(accountSchema)
+      .set({ ...accountUpdateData.accountData })
+      .where(eq(accountSchema.id, accountUpdateData.id));
+
+    return {
+      error: resultUpdate[0].affectedRows ? false : true,
+      data: null,
     };
   }
 }

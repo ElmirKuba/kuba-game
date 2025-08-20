@@ -189,4 +189,62 @@ export class AccountReadManagerService {
       data: resultRead.adaptData,
     };
   }
+
+  /**
+   * Прочитать аккаунт до его обновления по ID
+   * @param {string} id - Идентификатор аккаунта для его чтения перед обновлением его данных
+   * @returns {Promise<ManagerResult<IAccountFull | null>>} - Результат чтения аккаунта по его идентификатору
+   * @public
+   */
+  public async readBeforeUpdateData(
+    id: string,
+  ): Promise<ManagerResult<IAccountFull | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результаты чтения аккаунта */
+    const resultRead = await this.accountAdapterService.readOneBySlug({
+      columnName: 'id',
+      columnValue: id,
+    });
+
+    if (resultRead.error && !resultRead.adaptData) {
+      errorMessages.push(
+        `Аккаунт с идентификатором "${id}" не существует чтобы найти его и обновить его данные`,
+      );
+      successMessages.push(
+        `Передайте другой идентификатор, чтобы вновь попробовать обновить его данные`,
+      );
+
+      this.logger.error(
+        `AccountReadManagerService -> readBeforeUpdateData : Данные аккаунта с идентификатором "${id}" обновить не получится. Причина: Аккаунта скорее всего не существует`,
+      );
+
+      return {
+        error: true,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+        errorMessages,
+        successMessages,
+        data: null,
+      };
+    }
+
+    successMessages.push(
+      `Аккаунт с идентификатором "${id}" найден, его данные можно обновить`,
+    );
+
+    this.logger.log(
+      `AccountReadManagerService -> readBeforeUpdateData : Данные аккаунта с идентификатором "${id}" получится обновить`,
+    );
+
+    return {
+      error: false,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      errorMessages,
+      successMessages,
+      data: resultRead.adaptData,
+    };
+  }
 }

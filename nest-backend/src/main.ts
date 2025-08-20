@@ -17,9 +17,9 @@ import {
  * ✔ POST:   /api/account/logout        - Выход из аккаунта
  * ✔ POST:   /api/session/refresh       - Обновление AccessToken (если истёк)
  * ✔ GET:    /api/account/read          - Чтение данных аккаунта по его ID (или своего без указания ID)
+ * ✔ PATCH:  /api/account/update        - Редактирование аккаунта (например: логин, пароль)
  *
  * TODO: ElmirKuba 2025-08-04: Реализовать апишки описанные ниже:
- * !2. PATCH:  /api/account/edit         - Редактирование аккаунта (например: логин, пароль)
  * !3. DELETE: /api/account/remove       - Удаление аккаунта (и всех сессий)
  * !4. GET:    /api/session/list         - Получение всех сессий текущего аккаунта
  * !5. DELETE: /api/session/:id          - Удаление конкретной сессии по ID

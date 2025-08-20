@@ -56,6 +56,7 @@ export class ApiReadAccountController {
     };
 
     if (resultRead.error) {
+      // TODO: ElmirKuba 2025-08-20: Разобраться NOT_FOUND тут или ветвление как в апи создания пароля
       throw new HttpException(result, HttpStatus.NOT_FOUND);
     }
 
