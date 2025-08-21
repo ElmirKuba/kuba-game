@@ -15,6 +15,7 @@ import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookies.interface';
 import { UAParser } from 'ua-parser-js';
 import { IAccountWithoutPassword } from '../../../interfaces/full/account/account-without-password.interface';
+import { IAccountAuthSuccess } from '../../../interfaces/full/account/account-auth-success.interface';
 
 /** Контроллер REST-API связанного с функционалом обновления сессии */
 @Controller('session')
@@ -31,7 +32,7 @@ export class ApiRefreshSessionController {
    * Метод обновления сессии
    * @param {ReqWithCookies} req - Попутные данные при запросе на данное REST API
    * @param {Response} res - Попутные данные при ответе от данного REST API
-   * @returns {Promise<ApiResult<IAccountWithoutPassword | null>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
+   * @returns {Promise<ApiResult<IAccountAuthSuccess | null>>} - Результат работы REST-API Post эндпоинта авторизации аккаунта
    * @public
    */
   @Post('refresh')
@@ -41,7 +42,7 @@ export class ApiRefreshSessionController {
   public async refresh(
     @Req() req: ReqWithCookies,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ApiResult<IAccountWithoutPassword | null>> {
+  ): Promise<ApiResult<IAccountAuthSuccess | null>> {
     const incomingRefreshToken = req.cookies?.refreshToken;
 
     if (!incomingRefreshToken) {
@@ -72,11 +73,11 @@ export class ApiRefreshSessionController {
         userIp as string,
       );
 
-    const returned: ApiResult<IAccountWithoutPassword> = {
+    let returned: ApiResult<IAccountAuthSuccess | null> = {
       error: resultRefreshSession.error,
       successMessages: resultRefreshSession.successMessages,
       errorMessages: resultRefreshSession.errorMessages,
-      data: resultRefreshSession.data?.account as IAccountWithoutPassword,
+      data: null,
     };
 
     if (resultRefreshSession.error || !resultRefreshSession.data) {
@@ -85,6 +86,15 @@ export class ApiRefreshSessionController {
     }
 
     const { accessToken, refreshToken } = resultRefreshSession.data.tokens;
+
+    returned = {
+      ...returned,
+      data: {
+        autharizationAccount: resultRefreshSession.data
+          .account as IAccountWithoutPassword,
+        accessToken,
+      },
+    };
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,

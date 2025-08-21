@@ -15,6 +15,7 @@ import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import { IAccountWithoutPassword } from '../../../interfaces/full/account/account-without-password.interface';
 import { AccountAuthUseCaseService } from '../../../use-cases-level/account/auth/account-auth.use-case.service';
 import { IResult, UAParser } from 'ua-parser-js';
+import { IAccountAuthSuccess } from '../../../interfaces/full/account/account-auth-success.interface';
 
 /** Контроллер модуля REST-API связанного с функционалом авторизации аккаунта */
 @Controller('account')
@@ -30,7 +31,7 @@ export class ApiAuthAccountController {
    * @param {Request} req - Технические данные идущие вместе с запросом
    * @param {Response} res - Технические данные идущие вместе с ответом
    * @param {AccountToInputDataDto} accountToInputDataDto - Провалидированные DTO`s данные аккаунта для авторизации
-   * @returns {Promise<ApiResult<IAccountWithoutPassword | null>>} - Результат работы REST API Post метода авторизации
+   * @returns {Promise<ApiResult<IAccountAuthSuccess | null>>} - Результат работы REST API Post метода авторизации
    * @public
    */
   @Post('auth')
@@ -41,7 +42,7 @@ export class ApiAuthAccountController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Body() accountToInputDataDto: AccountToInputDataDto,
-  ): Promise<ApiResult<IAccountWithoutPassword | null>> {
+  ): Promise<ApiResult<IAccountAuthSuccess | null>> {
     /** IP вызывающего REST API */
     let userIp =
       req.headers['x-forwarded-for']?.toString() || req.socket.remoteAddress;
@@ -64,18 +65,28 @@ export class ApiAuthAccountController {
       userIp,
     });
 
-    const returned: ApiResult<IAccountWithoutPassword> = {
+    let returned: ApiResult<IAccountAuthSuccess | null> = {
       error: resultAuth.error,
       successMessages: resultAuth.successMessages,
       errorMessages: resultAuth.errorMessages,
-      data: resultAuth.data?.account as IAccountWithoutPassword,
+      data: null,
     };
 
     if (resultAuth.error || !resultAuth.data) {
+      // TODO: ElmirKuba 2025-08-20: Разобраться UNAUTHORIZED тут или ветвление как в апи создания пароля
       throw new HttpException(returned, HttpStatus.UNAUTHORIZED);
     }
 
     const { accessToken, refreshToken } = resultAuth.data.tokens;
+
+    returned = {
+      ...returned,
+      data: {
+        autharizationAccount: resultAuth.data
+          .account as IAccountWithoutPassword,
+        accessToken,
+      },
+    };
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,

@@ -1,15 +1,14 @@
 import {
   ConnectedSocket,
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { DefaultEventsMap, Server, Socket } from 'socket.io';
-import { Auth } from '../../utility-level/decorators/auth.decorator';
+import { AuthGuardService } from '../../utility-level/guards/auth-guard.service';
+import { ValidateTokensManagerService } from '../../managers-level/tokens/validate-tokens/validate-tokens.manager.service';
 
 /** Порт, который занимает REST-API */
 const port = process.env.BACKEND_PORT_WEBSOCKET ?? 3001;
@@ -17,6 +16,7 @@ const port = process.env.BACKEND_PORT_WEBSOCKET ?? 3001;
 @WebSocketGateway(Number(port), {
   cors: {
     origin: '*',
+    credentials: true,
   },
   cookie: true,
   namespace: 'socket-io-nest-backend',
@@ -30,10 +30,16 @@ export class SocketIOGatewayService
   /** Экземпляр текущего WebSocket сервера */
   @WebSocketServer() server: Server;
 
+  /**
+   * Конструктор GateWay сервиса
+   * @param {ValidateTokensManagerService} validateTokensManagerService — Экземпляр сервиса модуля валидации JWT токенов
+   */
+  constructor(
+    private readonly validateTokensManagerService: ValidateTokensManagerService,
+  ) {}
+
   afterInit(server: Server) {
     this.server = server;
-
-    // throw new WsException('Invalid credentials.');
   }
 
   /**
@@ -46,6 +52,24 @@ export class SocketIOGatewayService
     @ConnectedSocket() client: Socket,
     ...args: any[]
   ): void {
+    /** Получаем все заголовки */
+    const headers = client.handshake?.headers || {};
+
+    /** Токен доступа из заголовков WS */
+    const accessToken = headers['accesstoken'] as string;
+
+    const resultValidateAccessToken =
+      this.validateTokensManagerService.validateAnyToken(
+        accessToken,
+        'accessToken',
+      );
+
+    if (resultValidateAccessToken.error) {
+      client.emit('error', { message: 'UNAUTHORIZED' });
+      client.disconnect(true);
+      return;
+    }
+
     if (!this.getClientByClientObject(client)) {
       this.addClient(client);
     }
@@ -65,24 +89,24 @@ export class SocketIOGatewayService
     }
   }
 
-  /**
-   * Событие сработает если что-то пришло по адресу "kuba-nest-backend-path"
-   * @param {any} dto - Данные которые пришли от клиента по адресу "kuba-nest-backend-path"
-   * @param {Socket} client - Клиент который участвовал в отправке данных
-   * @returns {void} - Метод ничего не возвращает
-   * @public
-   */
-  @SubscribeMessage<string>('kuba-nest-backend-path')
-  @Auth({
-    defendType: 'ws',
-  })
-  public handleEvent(
-    @MessageBody() dto: any,
-    @ConnectedSocket() client: Socket,
-  ): void {
-    console.log('Нам пришло:', dto);
-    this.server.emit('kuba-angular-frontend-path', dto);
-  }
+  // /**
+  //  * Событие сработает если что-то пришло по адресу "angular-frontend_to_nest-backend"
+  //  * @param {any} dto - Данные которые пришли от клиента по адресу "angular-frontend_to_nest-backend"
+  //  * @param {Socket} client - Клиент который участвовал в отправке данных
+  //  * @returns {void} - Метод ничего не возвращает
+  //  * @public
+  //  */
+  // @SubscribeMessage<string>('angular-frontend_to_nest-backend')
+  // @Auth({
+  //   defendType: 'ws',
+  // })
+  // public handleEvent(
+  //   @MessageBody() dto: any,
+  //   @ConnectedSocket() client: Socket,
+  // ): void {
+  //   console.log('Нам пришло:', dto);
+  //   this.server.emit('nest-backend_to_angular-frontend', dto);
+  // }
 
   /**
    * Добавить клиента в массив клиентов по полному объекту клиента
