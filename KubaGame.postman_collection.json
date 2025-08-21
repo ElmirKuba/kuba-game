@@ -1,0 +1,426 @@
+{
+	"info": {
+		"_postman_id": "30f36180-48fb-4098-b356-a7e3c5c6f59a",
+		"name": "KubaGame",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19244912"
+	},
+	"item": [
+		{
+			"name": "0. Система",
+			"item": [
+				{
+					"name": "1. Запустить миграцию в базу данных",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/system/dev/migrate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"system",
+								"dev",
+								"migrate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "1. Аккаунты",
+			"item": [
+				{
+					"name": "1. Создать аккаунт",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"ElmirKuba\",\n    \"password\": \"KubaPasswordMama\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/account/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Авторизация аккаунта",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/** Данные полученные от REST-API */",
+									"const responseData = pm.response.json();",
+									"",
+									"if (!responseData.error) {",
+									"    /** Access JWT токен */",
+									"    const accessToken = responseData.data.accessToken;",
+									"    /** Логин авторизованного аккаунта */",
+									"    const login = responseData.data.autharizationAccount.login;",
+									"",
+									"    pm.environment.set(\"accessToken\", accessToken);",
+									"    pm.environment.set(\"loginAccount\", login);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"MamaLogin\",\n    \"password\": \"myNewPass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/account/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Выход из аккаунта",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const { code, status } = pm.response;",
+									"const jsonData = pm.response.json();",
+									"",
+									"console.log('3. Выход из аккаунта!!!', { code, status, jsonData })",
+									"",
+									"if (code === 401 && status === 'Unauthorized' && jsonData.error === true) {",
+									"    console.log('токен истек, запрос нового токена...');",
+									"",
+									"    pm.collectionVariables.set(\"requestToRetry\", pm.info.requestName);",
+									"",
+									"    pm.execution.setNextRequest('1. Обновить сессию (Eсли протух токен доступа)');",
+									"} else {",
+									"    pm.collectionVariables.unset(\"requestToRetry\");",
+									"}",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/account/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Прочитать мой аккаунт",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/account/read",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"read"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Прочитать аккаунт ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/account/read?id=d63cf7ce-1bb3-4523-8e1b-7292df7dffe6_1755688580867",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"read"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "d63cf7ce-1bb3-4523-8e1b-7292df7dffe6_1755688580867"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Обновить аккаунт новыми данными",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"fe6450b2-b847-4f1b-a508-38a35710d43d_1755430722937\",\n    \"accountData\": {\n        \"login\": \"MamaLogin\",\n        \"password\": \"myNewPass\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/account/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"account",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Сессии",
+			"item": [
+				{
+					"name": "1. Обновить сессию (Eсли протух токен доступа)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/** Данные полученные от REST-API */",
+									"const responseData = pm.response.json();",
+									"",
+									"if (!responseData.error) {",
+									"    /** Access JWT токен */",
+									"    const accessToken = responseData.data.accessToken;",
+									"    /** Логин авторизованного аккаунта */",
+									"    const login = responseData.data.autharizationAccount.login;",
+									"",
+									"    pm.environment.set(\"accessToken\", accessToken);",
+									"    pm.environment.set(\"loginAccount\", login);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/session/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"session",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Получение всех сессий текущего аккаунта",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const { code, status } = pm.response;",
+									"const jsonData = pm.response.json();",
+									"",
+									"console.log('1. Обновить сессию (Eсли протух токен доступа)!!!', { code, status, jsonData })",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/session/read-list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"session",
+								"read-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Удаление конкретной сессии по ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const { code, status } = pm.response;",
+									"const jsonData = pm.response.json();",
+									"",
+									"console.log('1. Обновить сессию (Eсли протух токен доступа)!!!', { code, status, jsonData })",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/session/delete?id=38526d5c-15b8-4c69-a5ea-a5ee690ff151_1755628156554",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"session",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "38526d5c-15b8-4c69-a5ea-a5ee690ff151_1755628156554"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Удаление всех сессий кроме текущей",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const { code, status } = pm.response;",
+									"const jsonData = pm.response.json();",
+									"",
+									"console.log('1. Обновить сессию (Eсли протух токен доступа)!!!', { code, status, jsonData })",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/session/clear-others",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"session",
+								"clear-others"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "requestToRetry",
+			"value": ""
+		}
+	]
+}
