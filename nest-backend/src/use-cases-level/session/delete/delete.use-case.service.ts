@@ -29,7 +29,7 @@ export class SessionDeleteUseCaseService {
    * @param {string} sessionIdForDeleted - Идентификатор сессии для удаления из Query-param
    * @param {string} accountId - Идентификатор аккаунта пользователя текущей сессии
    * @param {string} incomingRefreshTokenCurrentSession - JWT токен обновления пары токенов текущей сессии
-   * @returns {}
+   * @returns {Promise<UseCaseResult<ISessionFull | null>>} - Результат удаления своей сессии зная ее ID + данные самой удаленной сессии в случае успеха
    * @public
    * ! DELETE /api/session/:id
    * Только если session.account_id === currentAccount.id

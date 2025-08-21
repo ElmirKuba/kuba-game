@@ -29,7 +29,7 @@ export class ApiDeleteSessionsController {
    * Метод удаления своей сесии по его идентификатору
    * @param {ReqWithCookies} req - Попутные данные при запросе на данное REST API
    * @param {string} sessionIdForDeleted - Идентификатор сессии для удаления из Query-param
-   * @returns {}
+   * @returns {Promise<ApiResult<ISessionFull | null>>} - Результат удаления своей сессии зная ее ID + данные самой удаленной сессии в случае успеха
    * @public
    */
   @Delete('delete')
@@ -40,7 +40,7 @@ export class ApiDeleteSessionsController {
   public async deleteById(
     @Req() req: ReqWithCookies,
     @Query(`id`) sessionIdForDeleted: string,
-  ) {
+  ): Promise<ApiResult<ISessionFull | null>> {
     /** Токен обновления пары токенов текущей сесиии */
     const incomingRefreshTokenCurrentSession = req.cookies?.refreshToken;
     /** Идентификатор аккаунта  */
