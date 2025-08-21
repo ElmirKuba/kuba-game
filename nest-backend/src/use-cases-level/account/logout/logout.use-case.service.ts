@@ -35,6 +35,7 @@ export class AccountLogoutUseCaseService {
       };
     }
 
+    /** Результат удаления сессии зная ее идентификатор */
     const resultDeletedSessionAfterReading =
       await this.deleteSessionManagerService.delete(
         resultReadBeforeDelete.data?.id as string,

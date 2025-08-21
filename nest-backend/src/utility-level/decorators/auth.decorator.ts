@@ -1,5 +1,6 @@
 import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
 import { AuthGuardService } from '../guards/auth-guard.service';
+import { RoleGuardService } from '../guards/role-guard.service';
 
 /** Мета-ключ для передачи по нему массива ролей */
 export const METADATA_KEY_ROLES = 'METADATA_KEY_ROLES';
@@ -8,7 +9,6 @@ export const METADATA_KEY_ROLES = 'METADATA_KEY_ROLES';
 export const Auth = (...roles: string[]): MethodDecorator & ClassDecorator => {
   return applyDecorators(
     SetMetadata(METADATA_KEY_ROLES, roles),
-    // ! UseGuards(AuthGuardService, RoleGuardService)
-    UseGuards(AuthGuardService),
+    UseGuards(AuthGuardService, RoleGuardService),
   );
 };

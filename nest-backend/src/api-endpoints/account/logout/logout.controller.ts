@@ -42,6 +42,7 @@ export class ApiLogoutAccountController {
     @Req() req: ReqWithCookies,
     @Res({ passthrough: true }) res: Response,
   ): Promise<ApiResult<null>> {
+    /** Токен обновления пары токенов текущей сесиии */
     const incomingRefreshToken = req.cookies?.refreshToken;
 
     if (!incomingRefreshToken) {

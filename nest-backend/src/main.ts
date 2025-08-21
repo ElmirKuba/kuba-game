@@ -19,14 +19,10 @@ import {
  * ✔ GET:    /api/account/read          - Чтение данных аккаунта по его ID (или своего без указания ID)
  * ✔ PATCH:  /api/account/update        - Редактирование аккаунта (например: логин, пароль)
  * ✔ GET:    /api/session/read-list     - Получение всех сессий текущего аккаунта
+ * ✔ DELETE: /api/session/delete/:id    - Удаление конкретной сессии по ID
  *
  * TODO: ElmirKuba 2025-08-04: Реализовать апишки описанные ниже:
- * !5. DELETE: /api/session/:id          - Удаление конкретной сессии по ID
  * !6. POST:   /api/session/clear-others - Удаление всех сессий кроме текущей
- *
- * ! DELETE /api/session/:id
- * Только если session.account_id === currentAccount.id
- * Удаляет указанную сессию
  *
  * ! POST /api/session/clear-others
  * Удаляет все сессии, кроме текущей

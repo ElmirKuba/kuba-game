@@ -45,8 +45,6 @@ export class ApiReadSessionController {
         accountId as string,
       );
 
-    console.log('resultListRead:', resultListRead);
-
     const returned: ApiResult<ISessionFull[] | null> = {
       error: resultListRead.error,
       successMessages: resultListRead.successMessages,

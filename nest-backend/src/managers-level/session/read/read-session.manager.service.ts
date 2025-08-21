@@ -133,6 +133,61 @@ export class ReadSessionManagerService {
   }
 
   /**
+   * Чтение текущей сессии зная ее ID
+   * @param {string} id - Идентификатор сессии которая будет прочитана
+   * @returns {Promise<ManagerResult<ISessionFull | null>>} - Результат чтения сессии
+   * @public
+   */
+  public async readById(
+    id: string,
+  ): Promise<ManagerResult<ISessionFull | null>> {
+    /** Массив сообщений для ошибок */
+    const errorMessages: string[] = [];
+    /** Массив сообщений для успеха */
+    const successMessages: string[] = [];
+
+    /** Результат нахождения сессии в таблице сессий в СуБД */
+    const resultRead = await this.sessionAdapterService.readOneBySlug([
+      {
+        columnName: 'id',
+        columnValue: id,
+      },
+    ]);
+
+    if (resultRead.error && !resultRead.adaptData) {
+      errorMessages.push(`Сессия по идентификатору "${id}" не найдена!`);
+
+      this.logger.error(
+        `ReadSessionManagerService -> readById : Сессия по идентификатору "${id}" не найдена!. Причина: Скорее всего ни один аккаунт не авторизован по сессии с данным идентификатором`,
+      );
+
+      return {
+        error: true,
+        data: null,
+        errorMessages,
+        successMessages,
+        errorCode: EnumerationErrorCodes.ERROR_CODE_NOT_EXISTS,
+      };
+    }
+
+    successMessages.push(
+      `Сессия для аккаунта найдена по идентификатору "${id}"!`,
+    );
+
+    this.logger.log(
+      `ReadSessionManagerService -> readById : Сессия для аккаунта найдена по идентификатору "${id}"!`,
+    );
+
+    return {
+      error: false,
+      errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
+      successMessages,
+      errorMessages,
+      data: resultRead.adaptData,
+    };
+  }
+
+  /**
    * Чтение всех сессий аккаунта по его ID
    * @param {string} accountId - Идентификатор аккаунта по которому нужен список всех его сессий
    * @returns {} - Результат работы метода чтения всех сессий аккаунта по его идентификатора
