@@ -11,16 +11,17 @@ import {
  * Главная функция запуска NestJS приложения
  *
  * ✅ Уже реализовано:
- * ✔ GET:    /api/system/dev/migrate    - Запуск миграции в БД
- * ✔ POST:   /api/account/create        - Создание аккаунта
- * ✔ POST:   /api/account/auth          - Авторизация аккаунта
- * ✔ POST:   /api/account/logout        - Выход из аккаунта
- * ✔ POST:   /api/session/refresh       - Обновление AccessToken (если истёк)
- * ✔ GET:    /api/account/read          - Чтение данных аккаунта по его ID (или своего без указания ID)
- * ✔ PATCH:  /api/account/update        - Редактирование аккаунта (например: логин, пароль)
- * ✔ GET:    /api/session/read-list     - Получение всех сессий текущего аккаунта
- * ✔ DELETE: /api/session/delete/:id    - Удаление конкретной сессии по ID
- * ✔ POST:   /api/session/clear-others  - Удаление всех сессий кроме текущей
+ * ✔ GET:    /api/system/dev/migrate                        - Запуск миграции в БД
+ * ✔ POST:   /api/account/create                            - Создание аккаунта
+ * ✔ POST:   /api/account/auth                              - Авторизация аккаунта
+ * ✔ POST:   /api/account/logout                            - Выход из аккаунта
+ * ✔ POST:   /api/session/refresh                           - Обновление AccessToken (если истёк)
+ * ✔ GET:    /api/account/read                              - Чтение данных аккаунта по его ID (или своего без указания ID)
+ * ✔ PATCH:  /api/account/update                            - Редактирование аккаунта (например: логин, пароль)
+ * ✔ GET:    /api/session/read-list                         - Получение всех сессий текущего аккаунта
+ * ✔ DELETE: /api/session/delete/:id                        - Удаление конкретной сессии по ID
+ * ✔ POST:   /api/session/clear-others                      - Удаление всех сессий кроме текущей
+ * ✔ WS:     ws://localhost:3001/socket-io-nest-backend     - WebSocket URL для соединения
  *
  * @returns {Promise<void>}
  */
