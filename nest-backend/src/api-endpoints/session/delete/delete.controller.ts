@@ -35,7 +35,9 @@ export class ApiDeleteSessionsController {
    * @public
    */
   @Delete('delete')
-  @Auth()
+  @Auth({
+    defendType: 'api',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')
@@ -77,7 +79,9 @@ export class ApiDeleteSessionsController {
    * @public
    */
   @Post('clear-others')
-  @Auth()
+  @Auth({
+    defendType: 'api',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')

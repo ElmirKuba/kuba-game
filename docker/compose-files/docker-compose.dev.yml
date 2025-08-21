@@ -60,15 +60,19 @@ services:
       - ACCESS_TOKEN_LIFETIME=${ACCESS_TOKEN_LIFETIME}
       - REFRESH_KEY_JWT=${REFRESH_KEY_JWT}
       - REFRESH_TOKEN_LIFETIME=${REFRESH_TOKEN_LIFETIME}
+      - BACKEND_PORT_RESTAPI=${BACKEND_PORT_RESTAPI}
+      - BACKEND_PORT_WEBSOCKET=${BACKEND_PORT_WEBSOCKET}
     volumes: # Тома для обмена данными хостовой машины и операционной системой внутри Docker контейнера
       - ./../../nest-backend/src:/nest-backend/src:rw
       # TODO: ElmirKuba 2025-07-28: Расскоментировать строку ниже когда потребуется создаваемые backend частью проекта файлы сохранять между перезапусками контейнеров отдавая их на хостовую машину
       # - ./../../nest-backend/uploads:/nest-backend/uploads:rw
     command: sh -c "sleep 30s && npm run start:debug --verbose" # Команда которая поднимет через 30 секунд само приложение nest-backend внутри docker контейнера
     expose: # Объявление для Docker о необходимых портах внутри контейнера Docker
-      - ${BACKEND_PORT}
+      - ${BACKEND_PORT_RESTAPI}
+      - ${BACKEND_PORT_WEBSOCKET}
     ports: # Прокидывание портов наружу из контейнера Docker
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+      - ${BACKEND_PORT_RESTAPI}:${BACKEND_PORT_RESTAPI}
+      - ${BACKEND_PORT_WEBSOCKET}:${BACKEND_PORT_WEBSOCKET}
     networks: # Сети в которых этот контейнер Docker смогут находить другие контейнеры Docker
       - network_kubagame_project
     depends_on: # Заставляем контейнер phpMyAdmin ждать перечисленные контейнеры

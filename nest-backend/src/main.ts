@@ -37,7 +37,7 @@ async function bootstrap(): Promise<void> {
   /** Глобальный префикс REST-API */
   const globalPrefix = 'api';
   /** Порт, который занимает REST-API */
-  const port = process.env.PORT ?? 3000;
+  const port = process.env.BACKEND_PORT_RESTAPI ?? 3000;
 
   await app
     .setGlobalPrefix(globalPrefix)

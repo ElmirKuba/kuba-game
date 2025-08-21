@@ -29,7 +29,9 @@ export class ApiUpdateAccountController {
    * @public
    */
   @Patch('update')
-  @Auth()
+  @Auth({
+    defendType: 'api',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')

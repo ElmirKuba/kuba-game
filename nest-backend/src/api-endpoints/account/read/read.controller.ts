@@ -31,7 +31,9 @@ export class ApiReadAccountController {
    * @public
    */
   @Get('read')
-  @Auth()
+  @Auth({
+    defendType: 'api',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')

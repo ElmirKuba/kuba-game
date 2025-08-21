@@ -99,8 +99,6 @@ export class SessionDrizzleRepositoryService {
   public async readListByAccountId(
     accountId: string,
   ): Promise<ResultQueryRepository<ISessionFull[] | null>> {
-    console.log('Чтение всех сессий аккаунта по его ID', accountId);
-
     /** Результат чтения списка сессий */
     const resultListRead = await this.db
       .select()

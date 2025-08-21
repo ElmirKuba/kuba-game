@@ -6,16 +6,17 @@ import { AllManagerModule } from './managers-level/all.manager.module';
 import { AllAdaptersModule } from './adapters/all.adapter.module';
 import { AllDrizzleRepositoriesModule } from './drizzle-repositories/all.drizzle-repositories.module';
 import { AllUtilityLevelModule } from './utility-level/all.utility-level.module';
+import { AllGatewaysModule } from './gateways/all.gateways.module';
 
 /** Импорты системных модулей */
 const importsSystemsModules: Array<
   Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
 > = [SystemModule];
 
-/** Импорты модулей работы с REST-API */
-const importsApiEndpointsModules: Array<
+/** Импорты модулей работы с REST-API и Gateways */
+const importsApiEndpointsAndGatewaysModules: Array<
   Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
-> = [ApiEndpointsModule];
+> = [ApiEndpointsModule, AllGatewaysModule];
 
 /** Импорты модулей Use-Case уровня */
 const importsUseCasesModules: Array<
@@ -46,7 +47,7 @@ const importsUtilitiesModules: Array<
 @Module({
   imports: [
     ...importsSystemsModules,
-    ...importsApiEndpointsModules,
+    ...importsApiEndpointsAndGatewaysModules,
     ...importsUseCasesModules,
     ...importsManagersModules,
     ...importsAdaptersModules,

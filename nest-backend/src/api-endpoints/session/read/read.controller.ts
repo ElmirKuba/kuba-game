@@ -29,7 +29,9 @@ export class ApiReadSessionController {
    * @public
    */
   @Get('read-list')
-  @Auth()
+  @Auth({
+    defendType: 'api',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')
