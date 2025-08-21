@@ -7,12 +7,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { DefaultEventsMap, Server, Socket } from 'socket.io';
-import { AuthGuardService } from '../../utility-level/guards/auth-guard.service';
 import { ValidateTokensManagerService } from '../../managers-level/tokens/validate-tokens/validate-tokens.manager.service';
 
 /** Порт, который занимает REST-API */
 const port = process.env.BACKEND_PORT_WEBSOCKET ?? 3001;
 
+/** Gateway сервис обрабатывающий всю работу с WebSocket (Socket.IO) */
 @WebSocketGateway(Number(port), {
   cors: {
     origin: '*',
