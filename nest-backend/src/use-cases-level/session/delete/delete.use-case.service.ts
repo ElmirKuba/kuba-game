@@ -4,6 +4,7 @@ import { UseCaseResult } from '../../../interfaces/systems/use-case-result.inter
 import { ISessionFull } from '../../../interfaces/full/session/session-full.interface';
 import { EnumerationErrorCodes } from '../../../interfaces/systems/error-codes.interface';
 import { DeleteSessionManagerService } from '../../../managers-level/session/delete/delete.manager.service';
+import { EndOfSessions } from '../../../interfaces/systems/manager-result.interface';
 
 /** Сервис модуля бизнес логики уровня UseCase удаления сессий */
 @Injectable()
@@ -31,9 +32,6 @@ export class SessionDeleteUseCaseService {
    * @param {string} incomingRefreshTokenCurrentSession - JWT токен обновления пары токенов текущей сессии
    * @returns {Promise<UseCaseResult<ISessionFull | null>>} - Результат удаления своей сессии зная ее ID + данные самой удаленной сессии в случае успеха
    * @public
-   * ! DELETE /api/session/:id
-   * Только если session.account_id === currentAccount.id
-   * Удаляет указанную сессию
    */
   public async deleteById(
     sessionIdForDeleted: string,
@@ -111,5 +109,41 @@ export class SessionDeleteUseCaseService {
       data: resultRead.data,
       errorCode: EnumerationErrorCodes.ERROR_CODE_NULL,
     };
+  }
+
+  /**
+   * Удаление всех сессий кроме текущей
+   * @param {string} accountId - Идентификатор аккаунта пользователя текущей сессии
+   * @param {string} incomingRefreshTokenCurrentSession - JWT токен обновления пары токенов текущей сессии
+   * @returns {Promise<UseCaseResult<EndOfSessions | null>>} - Результат удаления своей сессии зная ее ID + данные самой удаленной сессии в случае успеха
+   * @public
+   */
+  public async clearOthers(
+    accountId: string,
+    incomingRefreshTokenCurrentSession: string,
+  ): Promise<UseCaseResult<EndOfSessions | null>> {
+    /** Результаты чтения сессий зная идентификатор аккаунта */
+    const resultListRead =
+      await this.readSessionManagerService.readListByAccountId(accountId);
+
+    if (resultListRead.error) {
+      return {
+        ...resultListRead,
+        data: null,
+      };
+    }
+
+    /** Результат удаления всех сессий кроме текущей */
+    const resultDeletedSession =
+      await this.deleteSessionManagerService.clearOthers(
+        resultListRead.data as ISessionFull[],
+        incomingRefreshTokenCurrentSession,
+      );
+
+    if (resultDeletedSession.error) {
+      return resultDeletedSession;
+    }
+
+    return resultDeletedSession;
   }
 }

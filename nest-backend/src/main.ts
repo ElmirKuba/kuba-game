@@ -20,13 +20,7 @@ import {
  * ✔ PATCH:  /api/account/update        - Редактирование аккаунта (например: логин, пароль)
  * ✔ GET:    /api/session/read-list     - Получение всех сессий текущего аккаунта
  * ✔ DELETE: /api/session/delete/:id    - Удаление конкретной сессии по ID
- *
- * TODO: ElmirKuba 2025-08-04: Реализовать апишки описанные ниже:
- * !6. POST:   /api/session/clear-others - Удаление всех сессий кроме текущей
- *
- * ! POST /api/session/clear-others
- * Удаляет все сессии, кроме текущей
- * Используется, когда пользователь выходит со всех устройств
+ * ✔ POST:   /api/session/clear-others  - Удаление всех сессий кроме текущей
  *
  * @returns {Promise<void>}
  */
