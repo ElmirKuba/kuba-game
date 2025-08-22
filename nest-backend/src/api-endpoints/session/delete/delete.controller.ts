@@ -15,8 +15,16 @@ import { SessionDeleteUseCaseService } from '../../../use-cases-level/session/de
 import { ISessionFull } from '../../../interfaces/full/session/session-full.interface';
 import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import { EndOfSessions } from '../../../interfaces/systems/manager-result.interface';
+import {
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
 
 /** Контроллер модуля REST-API связанного с функционалом удаления других своих сессий */
+@ApiTags('Методы удаления сессиий')
 @Controller('session')
 export class ApiDeleteSessionsController {
   /**
@@ -35,6 +43,19 @@ export class ApiDeleteSessionsController {
    * @public
    */
   @Delete('delete')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос на завершение определенной сессии (кого-то выкинет из аккаунта)',
+    description: 'При отсутствии ошибок возвращает результат завершения сессии',
+  })
+  @ApiOkResponse({
+    description:
+      'Сессия успешно завершена, возвратит данные завершенной сессии',
+    type: ApiResultDto<ISessionFull>,
+  })
+  @ApiForbiddenResponse({
+    description: 'Не удалось завершить сессию',
+  })
   @Auth({
     defendType: 'api',
   })
@@ -79,6 +100,20 @@ export class ApiDeleteSessionsController {
    * @public
    */
   @Post('clear-others')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос на завершение всех сессий текущего аккаунта кроме текущей (везде где он авторизован, произойдет разлогин)',
+    description:
+      'При отсутствии ошибок возвращает результат завершения сессий всех сессий кроме текущей',
+  })
+  @ApiOkResponse({
+    description:
+      'Сессии успешно завершена, возвратит данные завершенны сессий массивом',
+    type: ApiResultDto<EndOfSessions | null>,
+  })
+  @ApiForbiddenResponse({
+    description: 'Не удалось завершить сессии',
+  })
   @Auth({
     defendType: 'api',
   })

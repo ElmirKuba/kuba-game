@@ -16,8 +16,16 @@ import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookie
 import { UAParser } from 'ua-parser-js';
 import { IAccountWithoutPassword } from '../../../interfaces/full/account/account-without-password.interface';
 import { IAccountAuthSuccess } from '../../../interfaces/full/account/account-auth-success.interface';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
 
 /** Контроллер REST-API связанного с функционалом обновления сессии */
+@ApiTags('Обновить сессию')
 @Controller('session')
 export class ApiRefreshSessionController {
   /**
@@ -36,6 +44,19 @@ export class ApiRefreshSessionController {
    * @public
    */
   @Post('refresh')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос на обновление сессии авторизации аккаунта',
+    description: 'При отсутствии ошибок возвращает результат обновления сессии',
+  })
+  @ApiOkResponse({
+    description: 'Аккаунт успешно обновлен',
+    type: ApiResultDto<IAccountAuthSuccess | null>,
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      'Вы не авторизованы и у вас нет прав использовать данный функционал',
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')

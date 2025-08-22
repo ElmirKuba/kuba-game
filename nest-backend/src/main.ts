@@ -1,13 +1,55 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import {
   ApiExceptionFilter,
   exceptionFactoryHandler,
 } from './filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PackageSourceInnerService } from './utility-level/package-source/package-source.utility.service';
+import { ApiResultDto } from './dtos/output/api/api-result.dto';
+import { AccountToUpdateDataDto } from './dtos/input/account/account-to-input-data.dto';
+
+/** Глобальный префикс REST-API */
+const globalPrefix = 'api';
+
+/**
+ * Функция настройки всего что связано со Swagger
+ */
+const swaggerSetupBeforeStartApp = (app: INestApplication<any>) => {
+  /** Сам, непосредственно, экземпляр PackageSourceInnerService */
+  const packageSourceInstance = PackageSourceInnerService.getInstance();
+  /** Версия приложения */
+  const versionApp = packageSourceInstance.getPackageByKey('version');
+  /** URL веб-сайта разработчика */
+  const websiteDeveloper =
+    packageSourceInstance.getPackageByKey('websiteDeveloper');
+  /** E-Mail разработчика */
+  const emailDeveloper =
+    packageSourceInstance.getPackageByKey('emailDeveloper');
+
+  const configDoc = new DocumentBuilder()
+    .setTitle('Nest.js Backend часть проекта KubaGame.')
+    .setDescription(
+      'Описание всех endpoints, с которыми можно взаимодействовать с Backend часть проекта, реализованной средствами Nest.js фреймворка',
+    )
+    .setVersion(versionApp as string)
+    .setContact(
+      'ElmirKuba Develop',
+      websiteDeveloper as string,
+      emailDeveloper as string,
+    )
+    // .addCookieAuth()
+    .build();
+
+  const swDocument = SwaggerModule.createDocument(app, configDoc, {
+    deepScanRoutes: true,
+    extraModels: [ApiResultDto, AccountToUpdateDataDto],
+    ignoreGlobalPrefix: false,
+  });
+  SwaggerModule.setup(`/${globalPrefix}/docs`, app, swDocument);
+};
 
 /**
  * Главная функция запуска NestJS приложения
@@ -36,40 +78,10 @@ async function bootstrap(): Promise<void> {
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     },
   });
-
-  /** Глобальный префикс REST-API */
-  const globalPrefix = 'api';
   /** Порт, который занимает REST-API */
   const port = process.env.BACKEND_PORT_RESTAPI ?? 3000;
 
-  /** Сам, непосредственно, экземпляр PackageSourceInnerService */
-  const packageSourceInstance = PackageSourceInnerService.getInstance();
-  /** Версия приложения */
-  const versionApp = packageSourceInstance.getPackageByKey('version');
-  /** URL веб-сайта разработчика */
-  const websiteDeveloper =
-    packageSourceInstance.getPackageByKey('websiteDeveloper');
-  /** E-Mail разработчика */
-  const emailDeveloper =
-    packageSourceInstance.getPackageByKey('emailDeveloper');
-
-  const configDoc = new DocumentBuilder()
-    .setTitle('Nest.js Backend часть проекта KubaGame.')
-    .setDescription(
-      'Описание всех endpoints, с которыми можно взаимодействовать с Backend часть проекта, реализованной средствами Nest.js фреймворка',
-    )
-    .setVersion(versionApp as string)
-    .setContact(
-      'ElmirKuba Develop',
-      websiteDeveloper as string,
-      emailDeveloper as string,
-    )
-    .build();
-
-  const swDocument = SwaggerModule.createDocument(app, configDoc);
-  SwaggerModule.setup('/docs', app, swDocument);
-
-  await app
+  app
     .setGlobalPrefix(globalPrefix)
     .use(cookieParser())
     .useGlobalPipes(
@@ -81,8 +93,11 @@ async function bootstrap(): Promise<void> {
         exceptionFactory: exceptionFactoryHandler,
       }),
     )
-    .useGlobalFilters(new ApiExceptionFilter(app.get(HttpAdapterHost)))
-    .listen(port);
+    .useGlobalFilters(new ApiExceptionFilter(app.get(HttpAdapterHost)));
+
+  swaggerSetupBeforeStartApp(app);
+
+  await app.listen(port);
 
   Logger.log(
     `🚀 NestJS приложение запущено и слушает REST-API: http://localhost:${port}/${globalPrefix}`,

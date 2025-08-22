@@ -14,8 +14,16 @@ import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import { Auth } from '../../../utility-level/decorators/auth.decorator';
 import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookies.interface';
 import { AccountLogoutUseCaseService } from '../../../use-cases-level/account/logout/logout.use-case.service';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 /** Контроллер модуля REST-API связанного с функционалом выхода из аккаунта */
+@ApiTags('Выход из аккаунта')
 @Controller('account')
 export class ApiLogoutAccountController {
   /**
@@ -34,6 +42,20 @@ export class ApiLogoutAccountController {
    * @public
    */
   @Post('logout')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос на выход из аккаунта и завершение сессии работы с ним',
+    description:
+      'При отсутствии ошибок возвращает результат выхода из аккаунта',
+  })
+  @ApiOkResponse({
+    description: 'Выход из аккаунта успешно произведен',
+    type: ApiResultDto<null>,
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      'Вы не авторизованы и у вас нет прав использовать данный функционал',
+  })
   @Auth({
     defendType: 'api',
   })

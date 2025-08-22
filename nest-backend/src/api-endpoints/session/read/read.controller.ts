@@ -12,8 +12,16 @@ import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookie
 import { SessionReadUseCaseService } from '../../../use-cases-level/session/read/read.use-case.service';
 import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import { ISessionFull } from '../../../interfaces/full/session/session-full.interface';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
 
-/** Контроллер REST-API связанного с функционалом обновления сессии */
+/** Контроллер REST-API связанного с функционалом чтения сессий */
+@ApiTags('Прочитать все сессии текущего аккаунта')
 @Controller('session')
 export class ApiReadSessionController {
   /**
@@ -29,6 +37,20 @@ export class ApiReadSessionController {
    * @public
    */
   @Get('read-list')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос на чтение всех сессий авторизованного аккаунта',
+    description:
+      'При отсутствии ошибок возвращает результат массивом всех сессий авторизованного аккаунта',
+  })
+  @ApiOkResponse({
+    description: 'Получены все сессии аккаунта',
+    type: ApiResultDto<null>,
+  })
+  @ApiNotFoundResponse({
+    description:
+      'Аккаунт не имеет сессий, возможно не где не авторизован в настоящий момент',
+  })
   @Auth({
     defendType: 'api',
   })

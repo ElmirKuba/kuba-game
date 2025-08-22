@@ -16,8 +16,16 @@ import { IAccountWithoutPassword } from '../../../interfaces/full/account/accoun
 import { AccountAuthUseCaseService } from '../../../use-cases-level/account/auth/account-auth.use-case.service';
 import { IResult, UAParser } from 'ua-parser-js';
 import { IAccountAuthSuccess } from '../../../interfaces/full/account/account-auth-success.interface';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
 
 /** Контроллер модуля REST-API связанного с функционалом авторизации аккаунта */
+@ApiTags('Авторизация аккаунта')
 @Controller('account')
 export class ApiAuthAccountController {
   /**
@@ -35,6 +43,19 @@ export class ApiAuthAccountController {
    * @public
    */
   @Post('auth')
+  @ApiOperation({
+    summary: 'Этот метод отправляет запрос на авторизацию аккаунта',
+    description:
+      'При отсутствии ошибок возвращает результат авторизации аккаунта',
+  })
+  @ApiOkResponse({
+    description: 'Аккаунт успешно авторизован',
+    type: ApiResultDto<IAccountAuthSuccess | null>,
+  })
+  @ApiNotFoundResponse({
+    description: 'Аккаунт не найден',
+    type: ApiResultDto,
+  })
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
   @Header('Pragma', 'no-cache')

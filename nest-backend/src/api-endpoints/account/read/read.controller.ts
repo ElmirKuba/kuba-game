@@ -13,8 +13,17 @@ import type { ReqWithCookies } from '../../../interfaces/systems/req-with-cookie
 import { AccountReadUseCaseService } from '../../../use-cases-level/account/read/read.use-case.service';
 import { IAccountWithoutPassword } from '../../../interfaces/full/account/account-without-password.interface';
 import { ApiResult } from '../../../interfaces/api/api-interfaces';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 /** Контроллер REST-API связанный с функционалом чтения аккаунта */
+@ApiTags('Прочитать данные аккаунта')
 @Controller('account')
 export class ApiReadAccountController {
   /**
@@ -31,6 +40,26 @@ export class ApiReadAccountController {
    * @public
    */
   @Get('read')
+  @ApiOperation({
+    summary:
+      'Этот метод отправляет запрос то, чтобы получить данные аккаунта по ID или своего аккаунта в котором авторизован по cookie если ID не указан',
+    description:
+      'При отсутствии ошибок возвращает результат с данными аккаунта',
+  })
+  @ApiOkResponse({
+    description: 'Данные аккаунта успешно получены',
+    type: ApiResultDto<IAccountWithoutPassword | null>,
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      'Вы не авторизованы и у вас нет прав использовать данный функционал',
+  })
+  @ApiQuery({
+    name: 'id',
+    type: 'string',
+    description: 'Укажите идентификатор аккаунта',
+    required: false,
+  })
   @Auth({
     defendType: 'api',
   })

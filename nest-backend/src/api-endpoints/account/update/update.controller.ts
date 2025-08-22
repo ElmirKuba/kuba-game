@@ -11,7 +11,15 @@ import { AccountToUpdateDataDto } from '../../../dtos/input/account/account-to-i
 import { Auth } from '../../../utility-level/decorators/auth.decorator';
 import { AccountUpdateUseCaseService } from '../../../use-cases-level/account/update/update.use-case.service';
 import { ApiResult } from '../../../interfaces/api/api-interfaces';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 /** Контроллер REST-API связанный с функционалом чтения аккаунта */
+@ApiTags('Обновить данные аккаунта')
 @Controller('account')
 export class ApiUpdateAccountController {
   /**
@@ -29,6 +37,18 @@ export class ApiUpdateAccountController {
    * @public
    */
   @Patch('update')
+  @ApiOperation({
+    summary: 'Этот метод отправляет запрос на обновление данных аккаунта',
+    description:
+      'При отсутствии ошибок возвращает результат обновления аккаунта',
+  })
+  @ApiOkResponse({
+    description: 'Аккаунт успешно обновлен',
+    type: ApiResultDto<null>,
+  })
+  @ApiBadRequestResponse({
+    description: 'Не получилось обновить аккаунт',
+  })
   @Auth({
     defendType: 'api',
   })

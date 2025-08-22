@@ -12,8 +12,17 @@ import { ApiResult } from '../../../interfaces/api/api-interfaces';
 import { AccountToInputDataDto } from '../../../dtos/input/account/account-to-input-data.dto';
 import { UseCaseResult } from '../../../interfaces/systems/use-case-result.interface';
 import { EnumerationErrorCodes } from '../../../interfaces/systems/error-codes.interface';
+import { ApiResultDto } from '../../../dtos/output/api/api-result.dto';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 /** Контроллер модуля REST-API связанного с функционалом создания аккаунта */
+@ApiTags('Создание аккаунта')
 @Controller('account')
 export class ApiCreateAccountController {
   /**
@@ -31,6 +40,21 @@ export class ApiCreateAccountController {
    * @public
    **/
   @Post('create')
+  @ApiOperation({
+    summary: 'Этот метод отправляет запрос на создание аккаунта',
+    description:
+      'При отсутствии ошибок возвращает результат создания нового аккаунта',
+  })
+  @ApiCreatedResponse({
+    description: 'Новый аккаунт успешно создан',
+    type: ApiResultDto<null>,
+  })
+  @ApiConflictResponse({
+    description: 'Новый аккаунт создать не получится, логин занят!',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Произошла прочая какая-то ошибка',
+  })
   @HttpCode(HttpStatus.CREATED)
   public async create(
     @Body() accountToInputDataDto: AccountToInputDataDto,
