@@ -6,6 +6,8 @@ import {
   ApiExceptionFilter,
   exceptionFactoryHandler,
 } from './filters/http-exception.filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PackageSourceInnerService } from './utility-level/package-source/package-source.utility.service';
 
 /**
  * Главная функция запуска NestJS приложения
@@ -39,6 +41,33 @@ async function bootstrap(): Promise<void> {
   const globalPrefix = 'api';
   /** Порт, который занимает REST-API */
   const port = process.env.BACKEND_PORT_RESTAPI ?? 3000;
+
+  /** Сам, непосредственно, экземпляр PackageSourceInnerService */
+  const packageSourceInstance = PackageSourceInnerService.getInstance();
+  /** Версия приложения */
+  const versionApp = packageSourceInstance.getPackageByKey('version');
+  /** URL веб-сайта разработчика */
+  const websiteDeveloper =
+    packageSourceInstance.getPackageByKey('websiteDeveloper');
+  /** E-Mail разработчика */
+  const emailDeveloper =
+    packageSourceInstance.getPackageByKey('emailDeveloper');
+
+  const configDoc = new DocumentBuilder()
+    .setTitle('Nest.js Backend часть проекта KubaGame.')
+    .setDescription(
+      'Описание всех endpoints, с которыми можно взаимодействовать с Backend часть проекта, реализованной средствами Nest.js фреймворка',
+    )
+    .setVersion(versionApp as string)
+    .setContact(
+      'ElmirKuba Develop',
+      websiteDeveloper as string,
+      emailDeveloper as string,
+    )
+    .build();
+
+  const swDocument = SwaggerModule.createDocument(app, configDoc);
+  SwaggerModule.setup('/docs', app, swDocument);
 
   await app
     .setGlobalPrefix(globalPrefix)

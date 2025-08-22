@@ -1,6 +1,6 @@
 import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
-import { AuthGuardService } from '../guards/auth-guard.service';
-import { RoleGuardService } from '../guards/role-guard.service';
+import { AuthGuardService } from '../guards/auth.guard.utility.service';
+import { RoleGuardService } from '../guards/role.guard.utility.service';
 
 /** Мета-ключ для передачи по нему массива ролей */
 export const METADATA_KEY_ROLES = 'METADATA_KEY_ROLES';

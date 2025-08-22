@@ -1,10 +1,12 @@
 {
   "name": "nest-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Nest.js backend-часть проекта KubaGame",
+  "author": "ElmirKuba",
   "private": true,
   "license": "UNLICENSED",
+  "websiteDeveloper": "https://t.me/elmir_kuba",
+  "emailDeveloper": "elmir_kuba@vk.com",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -29,6 +31,7 @@
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.6",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/websockets": "^11.1.6",
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",

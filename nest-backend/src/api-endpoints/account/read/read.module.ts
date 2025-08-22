@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ApiReadAccountController } from './read.controller';
-import { AllUtilityLevelModule } from '../../../utility-level/all.utility-level.module';
 import { AccountReadUseCaseModule } from '../../../use-cases-level/account/read/read.use-case.module';
+import { GuardsUtilityModule } from '../../../utility-level/guards/guards.utility.module';
 
 /** Модуль REST-API связанный с функционалом чтения аккаунта */
 @Module({
-  imports: [AllUtilityLevelModule, AccountReadUseCaseModule],
+  imports: [GuardsUtilityModule, AccountReadUseCaseModule],
   exports: [],
   controllers: [ApiReadAccountController],
   providers: [],

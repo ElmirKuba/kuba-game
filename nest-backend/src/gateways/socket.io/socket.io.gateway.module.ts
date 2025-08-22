@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { SocketIOGatewayService } from './socket.io.gateway.service';
-import { AllUtilityLevelModule } from '../../utility-level/all.utility-level.module';
+import { GuardsUtilityModule } from '../../utility-level/guards/guards.utility.module';
 
 /** Модуль Gateway Socket.IO непосредственно */
 @Module({
-  imports: [AllUtilityLevelModule],
+  imports: [GuardsUtilityModule],
   exports: [],
   controllers: [],
   providers: [SocketIOGatewayService],

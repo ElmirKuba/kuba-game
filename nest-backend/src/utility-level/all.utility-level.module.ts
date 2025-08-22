@@ -1,18 +1,12 @@
 import { Module } from '@nestjs/common';
-import { RoleGuardService } from './guards/role-guard.service';
-import { AuthGuardService } from './guards/auth-guard.service';
-import { ValidateTokensManagerModule } from '../managers-level/tokens/validate-tokens/validate-tokens.manager.module';
+import { GuardsUtilityModule } from './guards/guards.utility.module';
+import { PackageSourceUtilityModule } from './package-source/package-source.utility.module';
 
 /** Модуль бизнес логики уровня Utility */
 @Module({
-  imports: [ValidateTokensManagerModule],
-  exports: [
-    ValidateTokensManagerModule,
-    //
-    AuthGuardService,
-    RoleGuardService,
-  ],
+  imports: [GuardsUtilityModule, PackageSourceUtilityModule],
+  exports: [],
   controllers: [],
-  providers: [AuthGuardService, RoleGuardService],
+  providers: [],
 })
 export class AllUtilityLevelModule {}
