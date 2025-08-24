@@ -1,0 +1,45 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Общие переменные */
+:root {
+  --primary-color: var(--mat-ref-palette-primary-500);
+  --primary-color-dark: var(--mat-ref-palette-primary-700);
+  --accent-color: var(--mat-ref-palette-tertiary-500);
+
+  --project-height: 78vh;
+  --overlay-color: rgba(0, 0, 0, 0.45);
+  --overlay-color-light: rgba(0, 0, 0, 0.45);
+  --overlay-color-dark: rgba(255, 255, 255, 0.15);
+}
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  height: 100%;
+
+  body {
+    color-scheme: light;
+    height: 100%;
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-body-medium);
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+  }
+}

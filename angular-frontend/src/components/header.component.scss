@@ -1,0 +1,31 @@
+.app-header {
+  &__toolbar {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(6px);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  &__project-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  &__spaces {
+    flex: 1 1 auto;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+}
